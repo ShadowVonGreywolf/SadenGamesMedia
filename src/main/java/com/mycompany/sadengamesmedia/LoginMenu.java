@@ -89,6 +89,6 @@ public class LoginMenu extends JFrame{
         logInButton.repaint();
         
         //testing
-
+        //test 2
     }
 }
