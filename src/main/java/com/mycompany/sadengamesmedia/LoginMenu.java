@@ -87,6 +87,8 @@ public class LoginMenu extends JFrame{
         logInButton.setVisible(true);
         menuPanel.add(logInButton);
         logInButton.repaint();
+        
+        //testing
 
     }
 }
