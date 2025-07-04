@@ -1,6 +1,8 @@
 com\mycompany\sadengamesmedia\MainMenu.class
+com\mycompany\sadengamesmedia\DatabaseManager.class
 com\mycompany\sadengamesmedia\LoginMenu.class
 com\mycompany\sadengamesmedia\SignUp$3.class
+com\mycompany\components\ImagePanel.class
 com\mycompany\sadengamesmedia\SignUp$1.class
 com\mycompany\sadengamesmedia\SignUp$4.class
 com\mycompany\sadengamesmedia\LoginMenu$2.class
@@ -8,7 +10,5 @@ com\mycompany\sadengamesmedia\SignUp$5.class
 com\mycompany\sadengamesmedia\LoginMenu$1.class
 com\mycompany\sadengamesmedia\SadenGamesMedia.class
 com\mycompany\sadengamesmedia\LoginMenu$3.class
-components\ImagePanel.class
-com\mycompany\sadengamesmedia\LoginMenu$4.class
 com\mycompany\sadengamesmedia\SignUp.class
 com\mycompany\sadengamesmedia\SignUp$2.class

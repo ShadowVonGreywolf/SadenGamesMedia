@@ -5,6 +5,8 @@
 package com.mycompany.sadengamesmedia;
 
 import java.io.IOException;
+import java.sql.Connection;
+import java.sql.SQLException;
 import javax.swing.JFrame;
 
 /**
@@ -14,9 +16,10 @@ import javax.swing.JFrame;
 public class SadenGamesMedia {
 
     
-    public static void main(String[] args) throws IOException{
+    public static void main(String[] args) throws IOException, SQLException{
     
         new LoginMenu();
+        Connection conn = DatabaseManager.getConnection();
     }
    
 }
