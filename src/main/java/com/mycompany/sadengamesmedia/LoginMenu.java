@@ -10,6 +10,8 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.Image;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import javax.swing.ImageIcon;
@@ -26,7 +28,7 @@ import javax.swing.JTextField;
 public class LoginMenu extends JFrame{
     
     public LoginMenu() throws IOException{
-        setTitle("Login");
+        setTitle("Saden Games & Media");
         setSize(1000, 500);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setVisible(true);
@@ -50,6 +52,7 @@ public class LoginMenu extends JFrame{
         add(menuPanel, Integer.valueOf(1));
         menuPanel.repaint();
         
+        
         JLabel titleLabel = new JLabel();
         titleLabel.setText("LOGIN");
         titleLabel.setBounds(130, 0, 300, 100);
@@ -58,6 +61,7 @@ public class LoginMenu extends JFrame{
         titleLabel.setForeground(Color.WHITE);
         menuPanel.add(titleLabel);
         
+        
         JLabel emailLabel = new JLabel();
         emailLabel.setText("Email : ");
         emailLabel.setBounds(60, 120, 120, 50);
@@ -65,6 +69,7 @@ public class LoginMenu extends JFrame{
         emailLabel.setForeground(Color.WHITE);
         emailLabel.setFont(new Font("Courier New", Font.ITALIC, 25));
         menuPanel.add(emailLabel);
+        
         
         JTextField emailText = new JTextField();
         emailText.setText("email address");
@@ -85,6 +90,7 @@ public class LoginMenu extends JFrame{
         menuPanel.add(passwordLabel);
         passwordLabel.repaint();
         
+        
         JTextField passwordText = new JTextField();
         passwordText.setText("password");
         passwordText.setOpaque(false);
@@ -94,6 +100,7 @@ public class LoginMenu extends JFrame{
         menuPanel.add(passwordText);
         passwordText.repaint();
         
+        
         JButton logInButton = new JButton();
         logInButton.setText("Log in");
         logInButton.setBounds(200, 225, 100, 50);
@@ -101,6 +108,13 @@ public class LoginMenu extends JFrame{
         logInButton.setVisible(true);
         menuPanel.add(logInButton);
         logInButton.repaint();
+        logInButton.addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e){
+                new MainMenu();
+                dispose();
+            }
+        });
         
         
         JLabel signUpLabel = new JLabel();
@@ -112,28 +126,13 @@ public class LoginMenu extends JFrame{
         menuPanel.add(signUpLabel);
         signUpLabel.repaint();
         
+        
         JButton signUpButton = new JButton();
         signUpButton.setText("Sign up");
         signUpButton.setBounds(260, 340, 100, 50);
         signUpButton.setVisible(true);
         menuPanel.add(signUpButton);
         signUpButton.repaint();
-        
 
-
-        
     }
-    
-    /*private void createBlurImage(Graphics2D g){
-        int x = 20;
-        int y = 20;
-        int width = 250;
-        int height = 250;
-        int shadow = 8;
-        if(width > 0 && height > 0){
-            BufferedImage img = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
-            Graphics2D g2 = img.createGraphics();
-            g2.drawImage(ImageUtil.blur(bufferedImage.getSubimage(x,y,width,height), 10f),0, 0, null);
-        }
-    }*/
 }
