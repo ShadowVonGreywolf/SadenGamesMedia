@@ -5,10 +5,10 @@
 package com.mycompany.components;
 
 import java.awt.Graphics;
+import java.awt.GridBagLayout;
 import java.awt.image.BufferedImage;
 import java.awt.image.ConvolveOp;
 import java.awt.image.Kernel;
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
@@ -28,13 +28,14 @@ public class ImagePanel extends JPanel{
         InputStream stream = getClass().getClassLoader().getResourceAsStream(imagePath);
         if (stream == null) throw new FileNotFoundException("Image not found: " + imagePath);
             image = ImageIO.read(stream);
+        setLayout(new GridBagLayout());
         blurredImage = blurImage(image);
     }
     
     @Override
     protected void paintComponent(Graphics g){
         super.paintComponent(g);
-        g.drawImage(blurredImage, 0, 0, this);
+        g.drawImage(image, 0, 0, this);
     }
     
       private BufferedImage blurImage(BufferedImage src) {
