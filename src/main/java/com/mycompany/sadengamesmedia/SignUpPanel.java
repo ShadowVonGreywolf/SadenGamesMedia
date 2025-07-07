@@ -8,7 +8,6 @@ import com.mycompany.components.ImagePanel;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
-import java.awt.GridBagLayout;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.IOException;
@@ -137,7 +136,7 @@ public class SignUpPanel extends JPanel{
                 String username = usernameText.getText();
                 String email = emailText.getText();
                 String password = passwordText.getText();
-                if(usernameText.getText().equals("") && emailText.getText().equals("") && passwordText.getText().equals("")){
+                if(usernameText.getText().equals("") || emailText.getText().equals("") || passwordText.getText().equals("")){
                     emailText.setBorder(new LineBorder(Color.RED, 2));
                     passwordText.setBorder(new LineBorder(Color.RED, 2));
                     usernameText.setBorder(new LineBorder(Color.RED, 2));
@@ -192,6 +191,9 @@ public class SignUpPanel extends JPanel{
                 emailText.setBorder(new LineBorder(Color.WHITE, 2));
                 passwordText.setBorder(new LineBorder(Color.WHITE, 2));
                 usernameText.setBorder(new LineBorder(Color.WHITE, 2));
+                emailText.setText("");
+                passwordText.setText("");
+                usernameText.setText("");
                 
             }
         };

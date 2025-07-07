@@ -1,3 +1,5 @@
+com\mycompany\sadengamesmedia\MainMenuPanel$1.class
+com\mycompany\sadengamesmedia\tabletest.class
 com\mycompany\sadengamesmedia\DatabaseManager.class
 com\mycompany\sadengamesmedia\SignUpPanel$3.class
 com\mycompany\components\ImagePanel.class
@@ -5,10 +7,11 @@ com\mycompany\sadengamesmedia\LoginPanel$2.class
 com\mycompany\sadengamesmedia\SignUpPanel.class
 com\mycompany\sadengamesmedia\testClass.class
 com\mycompany\sadengamesmedia\LoginPanel$3.class
-com\mycompany\sadengamesmedia\testClass$SlimScrollBarUI.class
 com\mycompany\sadengamesmedia\SignUpPanel$1.class
+com\mycompany\sadengamesmedia\testClass$1.class
 com\mycompany\sadengamesmedia\SadenGamesMedia.class
 com\mycompany\sadengamesmedia\SignUpPanel$2.class
 com\mycompany\sadengamesmedia\LoginPanel.class
+com\mycompany\sadengamesmedia\IconButton.class
 com\mycompany\sadengamesmedia\LoginPanel$1.class
 com\mycompany\sadengamesmedia\MainMenuPanel.class

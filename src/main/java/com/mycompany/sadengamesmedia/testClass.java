@@ -5,71 +5,97 @@
 package com.mycompany.sadengamesmedia;
 import javax.swing.*;
 import java.awt.*;
-import javax.swing.plaf.basic.BasicScrollBarUI;
-/**
- *
- * @author denia
- */
-public class testClass {
- public static void main(String[] args) {
-        JTextArea textArea = new JTextArea(20, 30);
-        for (int i = 0; i < 100; i++) textArea.append("Line " + i + "\n");
+import java.awt.event.*;
 
-        JScrollPane scrollPane = new JScrollPane(textArea);
-        scrollPane.getVerticalScrollBar().setUI(new SlimScrollBarUI());
+public class testClass extends JFrame {
+    private final JPanel sideMenu = new JPanel();
+    private final JPanel mainContent = new JPanel();
+    private final JButton openButton = new JButton("Menu");
+    private final JButton closeButton = new JButton("Close");
 
-        JFrame frame = new JFrame("Modern Scrollbar");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.add(scrollPane);
-        frame.pack();
-        frame.setVisible(true);
+    private boolean isDrawerOpen = false;
+    private Timer animationTimer;
+    private int drawerWidth = 0;
+    private final int maxDrawerWidth = 200;
+
+    public testClass() {
+        setTitle("Drawer Example");
+        setSize(800, 600);
+        setLayout(null);
+        setLocationRelativeTo(null);
+        setDefaultCloseOperation(EXIT_ON_CLOSE);
+
+        setupDrawer();
+        setupMainContent();
+        setupOpenButton();
+
+        setVisible(true);
     }
 
-    static class SlimScrollBarUI extends BasicScrollBarUI {
-        private final Dimension d = new Dimension();
+    private void setupDrawer() {
+        sideMenu.setBackground(Color.DARK_GRAY);
+        sideMenu.setLayout(new BoxLayout(sideMenu, BoxLayout.Y_AXIS));
+        sideMenu.setBounds(0, 0, drawerWidth, getHeight());
+        add(sideMenu);
 
-        @Override
-        protected JButton createDecreaseButton(int orientation) {
-            return createZeroButton();
-        }
+        // Align and size the close button properly
+        closeButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+        closeButton.setMaximumSize(new Dimension(100, 40));
+        closeButton.setFocusable(false);
+        closeButton.addActionListener(e -> toggleDrawer());
 
-        @Override
-        protected JButton createIncreaseButton(int orientation) {
-            return createZeroButton();
-        }
+        sideMenu.add(Box.createVerticalStrut(20)); // top spacing
+        sideMenu.add(closeButton);
+    }
 
-        private JButton createZeroButton() {
-            JButton button = new JButton();
-            button.setPreferredSize(d);
-            button.setMinimumSize(d);
-            button.setMaximumSize(d);
-            return button;
-        }
+    private void setupMainContent() {
+        mainContent.setBackground(Color.WHITE);
+        mainContent.setBounds(0, 0, getWidth(), getHeight());
+        mainContent.setLayout(null);
+        add(mainContent);
+    }
 
-        @Override
-        protected void paintThumb(Graphics g, JComponent c, Rectangle thumbBounds) {
-            Graphics2D g2 = (Graphics2D) g.create();
-            g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-            g2.setPaint(new Color(100, 100, 255, 180)); // translucent blue
-            g2.fillRoundRect(thumbBounds.x, thumbBounds.y, thumbBounds.width, thumbBounds.height, 10, 10);
-            g2.dispose();
-        }
+    private void setupOpenButton() {
+        openButton.setBounds(10, 10, 80, 30);
+        openButton.setFocusable(false);
+        openButton.addActionListener(e -> toggleDrawer());
+        mainContent.add(openButton);
+    }
 
-        @Override
-        protected void paintTrack(Graphics g, JComponent c, Rectangle trackBounds) {
-            // Optional: leave blank for a clean look
-        }
+    private void toggleDrawer() {
+        if (animationTimer != null && animationTimer.isRunning()) return;
 
-        @Override
-        protected Dimension getMaximumThumbSize() {
-            return new Dimension(8, Integer.MAX_VALUE);
-        }
+        isDrawerOpen = !isDrawerOpen;
 
-        @Override
-        protected Dimension getMinimumThumbSize() {
-            return new Dimension(8, 30);
-        }
-}}
+        animationTimer = new Timer(5, new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                int step = 10;
+                if (isDrawerOpen) {
+                    drawerWidth += step;
+                    if (drawerWidth >= maxDrawerWidth) {
+                        drawerWidth = maxDrawerWidth;
+                        animationTimer.stop();
+                    }
+                } else {
+                    drawerWidth -= step;
+                    if (drawerWidth <= 0) {
+                        drawerWidth = 0;
+                        animationTimer.stop();
+                    }
+                }
 
-    
+                // Update drawer and content layout
+                sideMenu.setBounds(0, 0, drawerWidth, getHeight());
+                sideMenu.revalidate();
+                sideMenu.repaint();
+            }
+        });
 
+        animationTimer.start();
+    }
+
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(testClass::new);
+    }
+}
