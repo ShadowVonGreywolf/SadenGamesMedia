@@ -5,6 +5,7 @@
 package com.mycompany.sadengamesmedia;
 
 import java.awt.CardLayout;
+import java.sql.SQLException;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
@@ -16,13 +17,13 @@ public class SadenGamesMedia extends JFrame {
     private CardLayout cardLayout = new CardLayout();
     private JPanel cardPanel;
     
-    public SadenGamesMedia(){
+    public SadenGamesMedia() throws SQLException{
     initComponents();
     }
     public void showPanel(String name) {
         cardLayout.show(cardPanel, name);
     }
-    private void initComponents(){
+    private void initComponents() throws SQLException{
         
         setTitle("Saden Games & Media");
         setSize(1200, 800);
@@ -45,7 +46,13 @@ public class SadenGamesMedia extends JFrame {
         
     }
     public static void main(String[] args){  
-        java.awt.EventQueue.invokeLater(() -> new SadenGamesMedia().setVisible(true));
+        java.awt.EventQueue.invokeLater(() -> {
+            try {
+                new SadenGamesMedia().setVisible(true);
+            } catch (SQLException ex) {
+                System.getLogger(SadenGamesMedia.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
+            }
+        });
     }
     
     

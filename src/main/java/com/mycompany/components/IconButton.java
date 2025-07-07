@@ -1,4 +1,4 @@
-package com.mycompany.sadengamesmedia;
+package com.mycompany.components;
 
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license

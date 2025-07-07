@@ -3,10 +3,14 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package com.mycompany.sadengamesmedia;
+import com.mycompany.components.IconButton;
+import com.mycompany.sadengamesmedia.model.ProductItem;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.SQLException;
+import java.util.List;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JPanel;
@@ -22,12 +26,12 @@ import javax.swing.table.DefaultTableModel;
 public class MainMenuPanel extends JPanel {
     private SadenGamesMedia sgm;
     
-    public MainMenuPanel(SadenGamesMedia sgm){
+    public MainMenuPanel(SadenGamesMedia sgm) throws SQLException{
         this.sgm = sgm;
         initComponents();
     }
 
-    private void initComponents() {
+    private void initComponents() throws SQLException {
         setLayout(null);
 
         sideMenu.setBackground(Color.DARK_GRAY);
@@ -39,12 +43,14 @@ public class MainMenuPanel extends JPanel {
         mainContent.setBounds(0, 50, 1200, 750);
         mainContent.setLayout(null);
         mainContent.setVisible(true);
+        mainContent.setBackground(new Color(34, 34, 34));
         add(mainContent);
         
         topPanel.setBackground(Color.CYAN);
         topPanel.setBounds(0, 0, 1200, 50);
         topPanel.setLayout(null);
         topPanel.setVisible(true);
+        topPanel.setBackground(new Color(15,15,15));
         add(topPanel);
         
         
@@ -67,12 +73,12 @@ public class MainMenuPanel extends JPanel {
         sideMenu.add(sideMenuCloseButton);   
         sideMenuCloseButton.addActionListener(e -> sideMenuAnimation());
         
-        productsList = new JTable(tableModel);
-        JScrollPane scrollPane = new JScrollPane(productsList);
-        scrollPane.setBounds(50, 50, 300, 200);
-        scrollPane.setVisible(true);
-        mainContent.add(scrollPane);
-
+        allProducts = ProductItem.getAllProducts();
+        productsPanel = new ProductsListPanel(allProducts);
+        productsPanel.setBounds(200, 100, 940, 600);
+        productsPanel.setVisible(true);
+        
+        mainContent.add(productsPanel);
         
     }
     private void sideMenuAnimation() {
@@ -119,6 +125,8 @@ public class MainMenuPanel extends JPanel {
     private int sideMenuWidth = 0;
     private boolean sideMenuOpen = false;
     private final int maxSideMenuWidth = 150;
+    private List<ProductItem> allProducts;
+    private ProductsListPanel productsPanel;
     
     
 }
