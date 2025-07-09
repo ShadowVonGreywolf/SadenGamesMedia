@@ -64,6 +64,11 @@ public class MainMenuPanel extends JPanel {
         add(topPanel);
         
         
+        accountPanel.setBounds(0, 50, 1200, 750);
+        accountPanel.setVisible(false);
+        add(accountPanel);
+        
+        
         sideMenuButton.setBounds(2, 0, 48, 48);
         sideMenuButton.setBorderPainted(false);
         sideMenuButton.setFocusPainted(false);
@@ -77,7 +82,8 @@ public class MainMenuPanel extends JPanel {
         accountButton.setOpaque(false);                     
         accountButton.setContentAreaFilled(false);           
         accountButton.setBorderPainted(false);
-        accountButton.setFocusPainted(false);  
+        accountButton.setFocusPainted(false); 
+        accountButton.addMouseListener(accountButtonAction());
         sideMenu.add(accountButton);   
         
         sideMenu.add(Box.createVerticalStrut(30));
@@ -91,6 +97,7 @@ public class MainMenuPanel extends JPanel {
         productsButton.setContentAreaFilled(false);           
         productsButton.setBorderPainted(false);
         productsButton.setFocusPainted(false);
+        productsButton.addMouseListener(productsButtonAction());
         sideMenu.add(productsButton); 
         
         sideMenu.add(Box.createVerticalStrut(360));
@@ -388,7 +395,26 @@ public class MainMenuPanel extends JPanel {
             
         };
     }
-    
+    private MouseAdapter accountButtonAction(){  
+        return new MouseAdapter(){
+            @Override
+            public void mouseClicked(MouseEvent e){
+                mainContent.setVisible(false);
+                accountPanel.setVisible(true);
+                sideMenuAnimation();
+            }
+        };
+    }
+    private MouseAdapter productsButtonAction(){  
+        return new MouseAdapter(){
+            @Override
+            public void mouseClicked(MouseEvent e){
+                accountPanel.setVisible(false);
+                mainContent.setVisible(true);
+                sideMenuAnimation();
+            }
+        };
+    }
     
     private MouseAdapter searchButtonAction(){  
         return new MouseAdapter(){
@@ -436,7 +462,7 @@ public class MainMenuPanel extends JPanel {
         });
         animationTimer.start();
     }
-    
+    private AccountPanel accountPanel = new AccountPanel();
     private GradientPanel sideMenu = new GradientPanel(new Color(10,15,30), new Color(55, 40, 80), RADIAL);
     private JPanel mainContent = new JPanel();
     private GradientPanel topPanel = new GradientPanel(new Color(10, 15, 30), new Color(35, 40, 60), RADIAL);

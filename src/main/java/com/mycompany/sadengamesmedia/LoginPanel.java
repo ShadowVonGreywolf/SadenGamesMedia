@@ -93,7 +93,7 @@ public class LoginPanel extends JPanel{
         passwordText.setBounds(225, 225, 220, 40);
         passwordText.setFont(new Font("Courier New", Font.ITALIC, 20));
         passwordText.setBorder(BorderFactory.createCompoundBorder(
-                    emailText.getBorder(), 
+                    passwordText.getBorder(), 
                     new EmptyBorder(5, 10, 5, 10)  
                 ));
         passwordText.setVisible(true);

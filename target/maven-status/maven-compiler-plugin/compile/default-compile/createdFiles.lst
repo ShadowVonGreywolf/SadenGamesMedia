@@ -1,5 +1,6 @@
 com\mycompany\components\GradientPanel.class
 com\mycompany\sadengamesmedia\ProductsListPanel$2.class
+com\mycompany\sadengamesmedia\MainMenuPanel$6.class
 com\mycompany\sadengamesmedia\SignUpPanel$4.class
 com\mycompany\sadengamesmedia\testClass.class
 com\mycompany\sadengamesmedia\SignUpPanel$1.class
@@ -21,8 +22,10 @@ com\mycompany\sadengamesmedia\model\Videogame.class
 com\mycompany\sadengamesmedia\DatabaseManager.class
 com\mycompany\sadengamesmedia\model\ProductItem.class
 com\mycompany\sadengamesmedia\LoginPanel$2.class
+com\mycompany\sadengamesmedia\AccountPanel$1.class
 com\mycompany\sadengamesmedia\testClass$1.class
 com\mycompany\sadengamesmedia\MainMenuPanel$5.class
+com\mycompany\sadengamesmedia\MainMenuPanel$7.class
 com\mycompany\sadengamesmedia\tabletest.class
 com\mycompany\components\ImagePanel.class
 com\mycompany\components\WrapLayout.class
@@ -34,4 +37,5 @@ com\mycompany\components\ProductCardPanel.class
 com\mycompany\sadengamesmedia\SignUpPanel$5.class
 com\mycompany\sadengamesmedia\SignUpPanel$2.class
 com\mycompany\sadengamesmedia\LoginPanel.class
+com\mycompany\sadengamesmedia\AccountPanel.class
 com\mycompany\sadengamesmedia\MainMenuPanel.class
