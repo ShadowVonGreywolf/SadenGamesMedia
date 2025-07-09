@@ -3,6 +3,8 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package com.mycompany.sadengamesmedia;
+import com.mycompany.components.GradientPanel;
+import static com.mycompany.components.GradientPanel.GradientType.*;
 import com.mycompany.components.IconButton;
 import com.mycompany.sadengamesmedia.model.ProductItem;
 import java.awt.Color;
@@ -46,11 +48,9 @@ public class MainMenuPanel extends JPanel {
         mainContent.setBackground(new Color(34, 34, 34));
         add(mainContent);
         
-        topPanel.setBackground(Color.CYAN);
         topPanel.setBounds(0, 0, 1200, 50);
         topPanel.setLayout(null);
         topPanel.setVisible(true);
-        topPanel.setBackground(new Color(15,15,15));
         add(topPanel);
         
         
@@ -115,12 +115,10 @@ public class MainMenuPanel extends JPanel {
     
     private JPanel sideMenu = new JPanel();
     private JPanel mainContent = new JPanel();
-    private JPanel topPanel = new JPanel();
+    private GradientPanel topPanel = new GradientPanel(new Color(10, 15, 30), new Color(35, 40, 60), RADIAL);
     private IconButton sideMenuButton = new IconButton("images/sideMenuButtonIcon.png", 48, 48);
     private JButton sideMenuCloseButton = new JButton("Close");
     private JButton accountButton = new JButton("Account");
-    private JTable productsList = new JTable();
-    private DefaultTableModel tableModel = new DefaultTableModel();
     private Timer animationTimer;
     private int sideMenuWidth = 0;
     private boolean sideMenuOpen = false;

@@ -24,7 +24,7 @@ public class ProductsListPanel extends JPanel{
 
         JPanel productsContainer = new JPanel();
         productsContainer.setLayout(new GridLayout(0, 3, 3, 3)); 
-        productsContainer.setBackground(new Color(20,20,20));
+        productsContainer.setBackground(new Color(10,15,30));
 
         for (ProductItem p : productList) { 
             ProductCardPanel card = new ProductCardPanel(p.getTitle(), p.getRating(), p.getPrice(), p.getImagePath());

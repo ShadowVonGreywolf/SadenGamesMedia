@@ -1,12 +1,14 @@
 com\mycompany\sadengamesmedia\MainMenuPanel$1.class
 com\mycompany\sadengamesmedia\model\Videogame.class
 com\mycompany\sadengamesmedia\DatabaseManager.class
+com\mycompany\components\GradientPanel.class
 com\mycompany\sadengamesmedia\model\ProductItem.class
 com\mycompany\sadengamesmedia\LoginPanel$2.class
 com\mycompany\sadengamesmedia\testClass.class
 com\mycompany\sadengamesmedia\SignUpPanel$1.class
 com\mycompany\sadengamesmedia\testClass$1.class
 com\mycompany\sadengamesmedia\SadenGamesMedia.class
+com\mycompany\components\ProductCardPanel$GradientType.class
 com\mycompany\sadengamesmedia\tabletest.class
 com\mycompany\sadengamesmedia\SignUpPanel$3.class
 com\mycompany\components\ImagePanel.class
@@ -15,6 +17,7 @@ com\mycompany\sadengamesmedia\SignUpPanel.class
 com\mycompany\sadengamesmedia\LoginPanel$3.class
 com\mycompany\components\ProductCardPanel.class
 com\mycompany\components\LabelImage.class
+com\mycompany\components\GradientPanel$GradientType.class
 com\mycompany\components\IconButton.class
 com\mycompany\sadengamesmedia\SignUpPanel$2.class
 com\mycompany\sadengamesmedia\LoginPanel.class

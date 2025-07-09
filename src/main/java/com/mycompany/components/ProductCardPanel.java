@@ -8,14 +8,17 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.GradientPaint;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.RadialGradientPaint;
+import java.awt.geom.Point2D;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JTextArea;
 import javax.swing.JTextPane;
-import javax.swing.SwingConstants;
 import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.StyleConstants;
 import javax.swing.text.StyledDocument;
@@ -26,12 +29,16 @@ import javax.swing.text.StyledDocument;
  */
 public class ProductCardPanel extends JPanel{
     
+    
+    
+    
     public ProductCardPanel(String title, float rating, double price, String imagePath){
         setPreferredSize(new Dimension(270, 320));
         setMaximumSize(new Dimension(270, 320));
         setBorder(BorderFactory.createEmptyBorder(2, 2, 2, 2 )); 
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-        setBackground(new Color(0,0,0));
+        setOpaque(false);
+       
         
         labelImage = new LabelImage(imagePath, 180, 200 );
         labelImage.setPreferredSize(new Dimension(180, 200));
@@ -49,7 +56,6 @@ public class ProductCardPanel extends JPanel{
         titlePane.setAlignmentX(Component.CENTER_ALIGNMENT);
         
 
-        // Enable centered paragraph alignment
         StyledDocument doc = titlePane.getStyledDocument();
         SimpleAttributeSet center = new SimpleAttributeSet();
         StyleConstants.setAlignment(center, StyleConstants.ALIGN_CENTER);
@@ -76,7 +82,44 @@ public class ProductCardPanel extends JPanel{
         add(priceLabel);
         add(Box.createVerticalStrut(10));
         add(ratingLabel);
+        revalidate();
+        repaint();
+        
     }
+    
+    public enum GradientType {
+        LINEAR,
+        RADIAL
+    }
+    private GradientType gradientType = GradientType.RADIAL;
+    protected void paintComponent(Graphics g){
+        super.paintComponent(g);
+
+        Graphics2D g2d = (Graphics2D) g;
+        int width = getWidth();
+        int height = getHeight();
+        
+        Color color1 = new Color(10,15,30);  
+        Color color2 = new Color(30,40,80);  
+        switch (gradientType) {
+            case RADIAL:
+                Point2D center = new Point2D.Float(width / 2f, height / 2f);
+                float radius = Math.max(width, height);
+                float[] dist = {0.0f, 1.0f};
+                Color[] colors = {color2, color1}; 
+                RadialGradientPaint radial = new RadialGradientPaint(center, radius, dist, colors);
+                g2d.setPaint(radial);
+                break;
+
+            case LINEAR:
+            default:
+                GradientPaint linear = new GradientPaint(0, 0, color1, 0, height, color2);
+                g2d.setPaint(linear);
+                break;
+        }
+        g2d.fillRect(0, 0, width, height);
+    }
+    
     public String insertLineBreaks(String text, int maxLineLength) {
         StringBuilder sb = new StringBuilder("<html>");
         int count = 0;
@@ -91,9 +134,9 @@ public class ProductCardPanel extends JPanel{
         sb.append("</html>");
         return sb.toString();
     }
-
+    
+    
     private LabelImage labelImage;
-    private JLabel titleLabel;
     private JLabel priceLabel;
     private JLabel ratingLabel;
 }
