@@ -12,15 +12,18 @@ public class Videogame extends ProductItem{
     private String platform;
     private String studio;
 
-    public Videogame(int id, String title, String genre, float rating, String description, double price, String imagePath, String platform, String studio) {
-        super(id, title, genre, rating, description, price, imagePath);
+    public Videogame(int id, String title, String genre, float rating, String description, double price, String imagePath, String type, String platform, String studio) {
+        super(id, title, genre, rating, description, price, imagePath, type);
         this.platform = platform;
         this.studio = studio;
     }
 
-    @Override
     public String getType() {
-        return "Videogame";
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 
     public String getPlatform() {

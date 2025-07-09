@@ -4,10 +4,13 @@
  */
 package com.mycompany.sadengamesmedia;
 
+import com.mycompany.components.IconButton;
 import com.mycompany.components.ImagePanel;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.IOException;
@@ -76,7 +79,7 @@ public class SignUpPanel extends JPanel{
                     new EmptyBorder(5, 10, 5, 10)  
                 ));
         usernameText.setVisible(true);
-        usernameText.addMouseListener(textFieldEmptier(usernameText));
+        usernameText.addFocusListener(textFieldEmptier(usernameText));
         formPanel.add(usernameText);
         
         emailLabel.setBounds(30, 250, 160, 50);                     //Email Label
@@ -94,7 +97,7 @@ public class SignUpPanel extends JPanel{
                     new EmptyBorder(5, 10, 5, 10)  
                 ));
         emailText.setVisible(true);
-        emailText.addMouseListener(textFieldEmptier(emailText));
+        emailText.addFocusListener(textFieldEmptier(emailText));
         formPanel.add(emailText);
         
         passwordLabel.setBounds(30, 310, 210, 50);              //Password Label
@@ -103,7 +106,6 @@ public class SignUpPanel extends JPanel{
         passwordLabel.setForeground(Color.WHITE);
         formPanel.add(passwordLabel);
         
-        passwordText.setText("password");
         passwordText.setOpaque(false);                        //Password Text 
         passwordText.setBounds(250, 310, 200, 40);
         passwordText.setBackground(new Color(50,74,74, 1));
@@ -113,20 +115,66 @@ public class SignUpPanel extends JPanel{
                     new EmptyBorder(5, 10, 5, 10)  
                 ));
         passwordText.setVisible(true);
-        passwordText.addMouseListener(textFieldEmptier(passwordText));
+        passwordText.addFocusListener(textFieldEmptier(passwordText));
         formPanel.add(passwordText);
         
-        signUpButton.setBounds(340, 375, 120, 40);                  // Sign up Button
+        
+        confirmPasswordLabel.setBounds(30, 370, 210, 50);              
+        confirmPasswordLabel.setVisible(true);
+        confirmPasswordLabel.setFont(new Font("Courier New", Font.ITALIC ,30));
+        confirmPasswordLabel.setForeground(Color.WHITE);
+        formPanel.add(confirmPasswordLabel);
+        
+        
+        confirmPasswordText.setOpaque(false);                         
+        confirmPasswordText.setBounds(250, 370, 200, 40);
+        confirmPasswordText.setBackground(new Color(50,74,74, 1));
+        confirmPasswordText.setFont(new Font("Courier New", Font.ITALIC, 20));
+        confirmPasswordText.setBorder(BorderFactory.createCompoundBorder(
+                    confirmPasswordText.getBorder(), 
+                    new EmptyBorder(5, 10, 5, 10)  
+                ));
+        confirmPasswordText.setVisible(true);
+        confirmPasswordText.addFocusListener(textFieldEmptier(confirmPasswordText));
+        formPanel.add(confirmPasswordText);
+        
+        signUpButton.setBounds(340, 500, 120, 50);                  // Sign up Button
         signUpButton.setVisible(true);
-        signUpButton.setFont(new Font("Arial", Font.BOLD ,20));
+        signUpButton.setFont(new Font("Courier New", Font.BOLD, 18));
+        signUpButton.setForeground(Color.WHITE);
+        signUpButton.setBackground(new Color(0, 180, 102));
+        signUpButton.setBorder(BorderFactory.createEmptyBorder(8, 15, 8, 15));
+        signUpButton.setFocusPainted(false);
         signUpButton.addMouseListener(signUpButtonClick());
         formPanel.add(signUpButton);
         
-        backButton.setBounds(30, 500, 100, 40);
+        backButton.setBounds(30, 500, 100, 50);
         backButton.setVisible(true);                                // Back Button
-        backButton.setFont(new Font("Arial", Font.BOLD ,20));
+        backButton.setFont(new Font("Courier New", Font.BOLD, 18));
+        backButton.setForeground(Color.WHITE);
+        backButton.setBackground(new Color(255, 50, 50));
+        backButton.setBorder(BorderFactory.createEmptyBorder(8, 15, 8, 15));
+        backButton.setFocusPainted(false);
         backButton.addMouseListener(backButtonAction());
         formPanel.add(backButton);
+        
+        showPasswordButton.setBounds(457, 317, 25, 25);
+        showPasswordButton.setVisible(true);
+        showPasswordButton.setOpaque(false);                     
+        showPasswordButton.setContentAreaFilled(false);           
+        showPasswordButton.setBorderPainted(false);
+        showPasswordButton.setFocusPainted(false); 
+        showPasswordButton.addMouseListener(showPasswordAction());
+        formPanel.add(showPasswordButton);
+        
+        showConfirmedPasswordButton.setBounds(457, 377, 25, 25);
+        showConfirmedPasswordButton.setVisible(true);
+        showConfirmedPasswordButton.setOpaque(false);                     
+        showConfirmedPasswordButton.setContentAreaFilled(false);           
+        showConfirmedPasswordButton.setBorderPainted(false);
+        showConfirmedPasswordButton.setFocusPainted(false); 
+        showConfirmedPasswordButton.addMouseListener(showConfirmedPasswordAction());
+        formPanel.add(showConfirmedPasswordButton);
     }
     
     private MouseAdapter signUpButtonClick(){
@@ -136,64 +184,101 @@ public class SignUpPanel extends JPanel{
                 String username = usernameText.getText();
                 String email = emailText.getText();
                 String password = passwordText.getText();
-                if(usernameText.getText().equals("") || emailText.getText().equals("") || passwordText.getText().equals("")){
-                    emailText.setBorder(new LineBorder(Color.RED, 2));
-                    passwordText.setBorder(new LineBorder(Color.RED, 2));
-                    usernameText.setBorder(new LineBorder(Color.RED, 2));
-                    errorLabel.setBounds(60, 350, 350, 50);                  // error Label
-                    errorLabel.setVisible(true);
-                    errorLabel.setFont(new Font("Arial", Font.BOLD ,15));
-                    errorLabel.setForeground(Color.RED);
-                    formPanel.add(errorLabel);
-                    errorLabel.repaint();
-                }
-                else {
-                    try{  
-                        emailText.setBorder(new LineBorder(Color.WHITE, 2));
-                        passwordText.setBorder(new LineBorder(Color.WHITE, 2));
-                        usernameText.setBorder(new LineBorder(Color.WHITE, 2));
-                        errorLabel.setVisible(false);
-                        Connection conn = DatabaseManager.getConnection();
-                        PreparedStatement stmt = conn.prepareStatement("INSERT INTO accounts (username, email, password) VALUES (?, ?, ?)");
-                        stmt.setString(1, username);
-                        stmt.setString(2, email);
-                        stmt.setString(3, password);
-                        int rowsInserted = stmt.executeUpdate();
-                        if (rowsInserted > 0) {
-                            System.out.println("Successful creation of account !");
-                            JOptionPane.showMessageDialog(null,"Successful registration!","Well done",JOptionPane.INFORMATION_MESSAGE);
-                            sgm.showPanel("mainMenu");
+                
+                if(email.toLowerCase().contains("@gmail.com") || email.toLowerCase().contains("@yahoo.com"))
+                    if(!confirmPasswordText.getText().equals(password)){
+                        passwordText.setBorder(new LineBorder(Color.RED, 2));
+                        confirmPasswordText.setBorder(new LineBorder(Color.RED, 2));
+                        JOptionPane.showMessageDialog(null,"Error! Please enter the same password!","Account error",JOptionPane.ERROR_MESSAGE);
+                    }
+                    else {
+                        try{  
+                            emailText.setBorder(new LineBorder(Color.WHITE, 2));
+                            passwordText.setBorder(new LineBorder(Color.WHITE, 2));
+                            usernameText.setBorder(new LineBorder(Color.WHITE, 2));
+                            Connection conn = DatabaseManager.getConnection();
+                            PreparedStatement stmt = conn.prepareStatement("INSERT INTO accounts (username, email, password) VALUES (?, ?, ?)");
+                            stmt.setString(1, username);
+                            stmt.setString(2, email);
+                            stmt.setString(3, password);
+                            int rowsInserted = stmt.executeUpdate();
+                            if (rowsInserted > 0) {
+                                System.out.println("Successful creation of account !");
+                                JOptionPane.showMessageDialog(null,"Successful registration!","Well done",JOptionPane.INFORMATION_MESSAGE);
+                                sgm.showPanel("mainMenu");
+                            }
+                            }catch(SQLException ex){
+                                JOptionPane.showMessageDialog(null,"Error! Account already in use!","Account error",JOptionPane.ERROR_MESSAGE);
+                            }        
                         }
-                        }catch(SQLException ex){
-                            JOptionPane.showMessageDialog(null,"Error! Account already in use!","Account error",JOptionPane.ERROR_MESSAGE);
-                        }        
+                else
+                    JOptionPane.showMessageDialog(null,"Error! Invalid email credentials!","Account error",JOptionPane.ERROR_MESSAGE);
+            }
+        };
+    }
+    private boolean passwordClicked = false;
+    private MouseAdapter showPasswordAction(){
+        return new MouseAdapter(){
+            @Override
+            public void mouseClicked(MouseEvent e){
+                passwordClicked = !passwordClicked;
+                if(passwordClicked){
+                   passwordText.setEchoChar((char) 0); 
+                   showPasswordButton.setNewIcon("images/visibilityOn.png");
+                }else{
+                    passwordText.setEchoChar('*');
+                    showPasswordButton.setNewIcon("images/visibilityOff.png");
                 }
+                
+                
+            }
+        };
+    }
+    private boolean confirmPasswordClicked = false;
+    private MouseAdapter showConfirmedPasswordAction(){
+        return new MouseAdapter(){
+            @Override
+            public void mouseClicked(MouseEvent e){
+                confirmPasswordClicked = !confirmPasswordClicked;
+                if(confirmPasswordClicked){
+                   confirmPasswordText.setEchoChar((char) 0); 
+                   showConfirmedPasswordButton.setNewIcon("images/visibilityOn.png");
+                }else{
+                    confirmPasswordText.setEchoChar('*');
+                    showConfirmedPasswordButton.setNewIcon("images/visibilityOff.png");
+                }
+                
+                
             }
         };
     }
     
-    private MouseAdapter textFieldEmptier(JTextField a){        //empties textfields on which the mouse clicks 
-        return new MouseAdapter(){
-            @Override
-            public void mousePressed(MouseEvent e){
-                if(a.getText().equals("password")||a.getText().equals("email address")||a.getText().equals("username"))
-                    a.setText("");
+    private FocusListener textFieldEmptier(JTextField a){
+        return new FocusListener(){
+            String string ;
+        @Override
+        public void focusGained(FocusEvent e) {
+            if (a.getText().equals("email address") || a.getText().equals("password")||a.getText().equals("username")) {
+                string = a.getText();
+                a.setText("");
             }
-        };
-    }
-        
+        }
+            @Override
+            public void focusLost(FocusEvent e) {
+                if (a.getText().trim().isEmpty()) {
+                    a.setText(string);
+                }
+            }
+    };
+    } 
     private MouseAdapter backButtonAction(){
         return new MouseAdapter(){
             @Override
             public void mouseClicked(MouseEvent e){
                 sgm.showPanel("login");
-                errorLabel.setVisible(false);
                 emailText.setBorder(new LineBorder(Color.WHITE, 2));
                 passwordText.setBorder(new LineBorder(Color.WHITE, 2));
                 usernameText.setBorder(new LineBorder(Color.WHITE, 2));
-                emailText.setText("");
-                passwordText.setText("");
-                usernameText.setText("");
                 
             }
         };
@@ -207,7 +292,10 @@ public class SignUpPanel extends JPanel{
     private JTextField emailText = new JTextField("email address");
     private final JLabel passwordLabel = new JLabel("Password : ");
     private JPasswordField passwordText = new JPasswordField("password");
-    private final JLabel errorLabel = new JLabel("Please fill out all required fields!");
     private final JButton signUpButton = new JButton("Sign up");
     private final JButton backButton = new JButton("Back");
+    private JPasswordField confirmPasswordText = new JPasswordField("password");
+    private JLabel confirmPasswordLabel = new JLabel("Confirm :");
+    private IconButton showPasswordButton = new IconButton("images/visibilityOff.png", 25, 25);
+    private IconButton showConfirmedPasswordButton = new IconButton("images/visibilityOff.png", 25, 25);
 }

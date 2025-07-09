@@ -12,15 +12,18 @@ public class Movie extends ProductItem {
     private String director ;
     private int duration;
 
-    public Movie(int id, String title, String genre, float rating, String description, double price, String imagePath, String director, int duration) {
-        super(id, title, genre, rating, description, price, imagePath);
+    public Movie(int id, String title, String genre, float rating, String description, double price, String imagePath, String type, String director, int duration) {
+        super(id, title, genre, rating, description, price, imagePath, type);
         this.director = director;
         this.duration = duration;
     }
 
-    @Override
     public String getType() {
-        return "Movie";
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 
     public void setDirector(String director) {

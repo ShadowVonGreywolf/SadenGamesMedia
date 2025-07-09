@@ -107,7 +107,7 @@ public class ProductCardPanel extends JPanel{
                 float radius = Math.max(width, height);
                 float[] dist = {0.0f, 1.0f};
                 Color[] colors = {color2, color1}; 
-                RadialGradientPaint radial = new RadialGradientPaint(center, radius, dist, colors);
+                RadialGradientPaint radial = new RadialGradientPaint(center, radius* 0.5f, dist, colors);
                 g2d.setPaint(radial);
                 break;
 

@@ -4,10 +4,13 @@
  */
 package com.mycompany.sadengamesmedia;
 
+import com.mycompany.components.IconButton;
 import com.mycompany.components.ImagePanel;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.IOException;
@@ -76,7 +79,7 @@ public class LoginPanel extends JPanel{
                     new EmptyBorder(5, 10, 5, 10)  
                 ));
         emailText.setVisible(true);
-        emailText.addMouseListener(textFieldEmptier(emailText));
+        emailText.addFocusListener(textFieldEmptier(emailText));
         formPanel.add(emailText);
         
         passwordLabel.setBounds(25, 220, 200, 50);                  //Password Label
@@ -94,14 +97,19 @@ public class LoginPanel extends JPanel{
                     new EmptyBorder(5, 10, 5, 10)  
                 ));
         passwordText.setVisible(true);
-        passwordText.addMouseListener(textFieldEmptier(passwordText));
+        passwordText.addFocusListener(textFieldEmptier(passwordText));
         formPanel.add(passwordText);
         
         loginButton.setBounds(310, 300, 100, 50);                       //Login Button
-        loginButton.setFont(new Font("Courier New", Font.ITALIC, 15));
+        loginButton.setFont(new Font("Courier New", Font.BOLD, 20));
         loginButton.setVisible(true);
+        loginButton.setForeground(Color.WHITE);
+        loginButton.setFocusPainted(false);
+        loginButton.setBackground(new Color(70, 130, 180));
+        loginButton.setBorder(BorderFactory.createEmptyBorder(8, 15, 8, 15));
         loginButton.addMouseListener(loginButtonClick());
         formPanel.add(loginButton);
+        
         
         signUpLabel.setBounds(40, 435, 460, 100);           // Sign up Label
         signUpLabel.setVisible(true);
@@ -109,22 +117,62 @@ public class LoginPanel extends JPanel{
         signUpLabel.setForeground(Color.WHITE);
         formPanel.add(signUpLabel);
         
-        signUpButton.setBounds(340, 500, 100, 50);      // Sign up Button 
+        signUpButton.setBounds(340, 500, 120, 50);      // Sign up Button 
         signUpButton.setVisible(true);
+        signUpButton.setFont(new Font("Courier New", Font.BOLD, 18));
+        signUpButton.setForeground(Color.WHITE);
+        signUpButton.setBackground(new Color(0, 180, 102));
+        signUpButton.setBorder(BorderFactory.createEmptyBorder(8, 15, 8, 15));
+        signUpButton.setFocusPainted(false);
         signUpButton.addMouseListener(signUpButtonClick());
-        formPanel.add(signUpButton);
+        formPanel.add(signUpButton);   
+        
+        showPasswordButton.setBounds(452, 232, 25, 25);//225, 225, 220, 40
+        showPasswordButton.setVisible(true);
+        showPasswordButton.setOpaque(false);                     
+        showPasswordButton.setContentAreaFilled(false);           
+        showPasswordButton.setBorderPainted(false);
+        showPasswordButton.setFocusPainted(false); 
+        showPasswordButton.addMouseListener(showPasswordAction());
+        formPanel.add(showPasswordButton);
     }
-    
-    private MouseAdapter textFieldEmptier(JTextField a){//empties textfields on which the mouse clicks 
+    private boolean passwordClicked = false;
+    private MouseAdapter showPasswordAction(){
         return new MouseAdapter(){
             @Override
-            public void mousePressed(MouseEvent e){
-                if(a.getText().equals("password")||a.getText().equals("email address"))
-                    a.setText("");
+            public void mouseClicked(MouseEvent e){
+                passwordClicked = !passwordClicked;
+                if(passwordClicked){
+                   passwordText.setEchoChar((char) 0); 
+                   showPasswordButton.setNewIcon("images/visibilityOn.png");
+                }else{
+                    passwordText.setEchoChar('*');
+                    showPasswordButton.setNewIcon("images/visibilityOff.png");
+                }
+                
+                
             }
         };
     }
-        
+
+    private FocusListener textFieldEmptier(JTextField a){
+        return new FocusListener(){
+            String string ;
+        @Override
+        public void focusGained(FocusEvent e) {
+            if (a.getText().equals("email address") || a.getText().equals("password")) {
+                string = a.getText();
+                a.setText("");
+            }
+        }
+            @Override
+            public void focusLost(FocusEvent e) {
+                if (a.getText().trim().isEmpty()) {
+                    a.setText(string);
+                }
+            }
+    };
+    } 
     private MouseAdapter loginButtonClick(){  //checks if the credentials (email and password) are valid
         return new MouseAdapter(){
             @Override
@@ -186,8 +234,9 @@ public class LoginPanel extends JPanel{
     private  JTextField emailText = new JTextField("email address");
     private final JLabel passwordLabel = new JLabel("Password : ");
     private  JPasswordField passwordText = new JPasswordField("password");
-    private final JButton loginButton = new JButton("Log in");
+    private final JButton loginButton = new JButton("Login");
     private final JLabel signUpLabel = new JLabel("<html>Don't have an account ? Sign up now !</html>");
     private final JButton signUpButton = new JButton("Sign up");
     private final JLabel errorLabel = new JLabel("Incorrect email or password!");
+    private IconButton showPasswordButton = new IconButton("images/visibilityOff.png", 25, 25);
 }

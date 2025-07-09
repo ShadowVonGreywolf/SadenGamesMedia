@@ -25,8 +25,9 @@ public abstract class ProductItem {
     protected double price;
     protected String description;
     protected float rating;
+    protected String type;
 
-    public ProductItem(int id, String title, String genre, float rating, String description, double price, String imagePath ) {
+    public ProductItem(int id, String title, String genre, float rating, String description, double price, String imagePath, String type ) {
         this.id = id;
         this.title = title;
         this.genre = genre;
@@ -34,9 +35,17 @@ public abstract class ProductItem {
         this.imagePath = imagePath;
         this.price = price;
         this.description = description;
+        this.type = type;
+    }
+    //public abstract String getType();
+    
+    public String getType() {
+        return type;
     }
     
-    public abstract String getType();
+    public void setType(String type) {
+        this.type = type;
+    }
 
     public int getId() {
         return id;
@@ -112,7 +121,7 @@ public abstract class ProductItem {
             
             if (type.equals("Movie")) {
                 int productId = id;
-                PreparedStatement movieStmt = conn.prepareStatement("SELECT director, duration FROM movie WHERE movie_id = ?");
+                PreparedStatement movieStmt = conn.prepareStatement("SELECT director, duration FROM movies WHERE movie_id = ?");
                 movieStmt.setInt(1, productId);
                 ResultSet movieRs = movieStmt.executeQuery();
                 String director = ""; int duration = 0;
@@ -123,7 +132,7 @@ public abstract class ProductItem {
                 movieRs.close();
                 movieStmt.close();
             
-                Movie movie = new Movie(id, title, genre, rating, description, price, imagePath, director, duration);
+                Movie movie = new Movie(id, title, genre, rating, description, price, imagePath, type, director, duration);
                 
                 result.add(movie);
             } else if (type.equals("Videogame")) {
@@ -138,7 +147,7 @@ public abstract class ProductItem {
                 }
                 videogameRs.close();
                 videogameStmt.close();
-                Videogame game = new Videogame(id, title, genre, rating, description, price, imagePath, platform, studio);
+                Videogame game = new Videogame(id, title, genre, rating, description, price, imagePath, type, platform, studio);
                 result.add(game);
             }
         }
