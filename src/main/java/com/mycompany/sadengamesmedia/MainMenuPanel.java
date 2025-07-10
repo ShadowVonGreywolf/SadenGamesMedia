@@ -7,6 +7,8 @@ import com.mycompany.components.GradientPanel;
 import static com.mycompany.components.GradientPanel.GradientType.*;
 import com.mycompany.components.IconButton;
 import com.mycompany.sadengamesmedia.model.ProductItem;
+import com.mycompany.sadengamesmedia.model.Session;
+import com.mycompany.sadengamesmedia.model.User;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -16,6 +18,7 @@ import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.nio.file.Paths;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -38,11 +41,48 @@ import javax.swing.Timer;
 public class MainMenuPanel extends JPanel {
     private SadenGamesMedia sgm;
     
+    public MainMenuPanel(){
+    
+    }
+    
     public MainMenuPanel(SadenGamesMedia sgm) throws SQLException{
         this.sgm = sgm;
+        accountButton = new IconButton("images/myAccountIcon.png", 100, 100);
+        accountPanel = new AccountPanel(sgm);
         initComponents();
+        loadProfileImage();
     }
+    
+        public void loadProfileImage() {
+            User user = Session.getCurrentUser();
+            System.out.println("inainte de test ");
+            String path = Paths.get(System.getProperty("user.dir"), "profile_images", "myAccountIcon.png").toString();
+            if (user != null) {
+                if(user.getImagePath() != null){
+                    System.out.println("trebuie sa mearga imaginea");
+                    accountButton.setNewIcon(user.getImagePath(), 100, 100);
+                    accountPanel.loadImageStartUp(user.getImagePath(), 300, 300);
+                    accountPanel.setTextFieldsValues();
+                }else{
+                    System.out.println("imaginea  e null");
+                    accountPanel.setTextFieldsValues();
+                }
+            } else {
+                System.out.println("userul  e null");
+                accountButton.setIcon(path, 100, 100);
+                accountPanel.loadImageStartUp(path, 300, 300);
+            }
 
+            revalidate();
+            repaint();
+        }
+
+        
+        public void onShow() {
+            loadProfileImage();
+        }
+    
+    
     private void initComponents() throws SQLException {
         setLayout(null);
 
@@ -75,6 +115,7 @@ public class MainMenuPanel extends JPanel {
         sideMenuButton.setContentAreaFilled(false);
         topPanel.add(sideMenuButton);
         sideMenuButton.addActionListener(e -> sideMenuAnimation());
+       
         
         accountButton.setPreferredSize(new Dimension(100, 100));
         accountButton.setMaximumSize(new Dimension(150, 100));
@@ -336,6 +377,9 @@ public class MainMenuPanel extends JPanel {
         mainContent.add(filterRange);
         
         
+        
+        
+        
     }
     
     private FocusListener searchBarFocusListener(JTextField a){
@@ -395,6 +439,10 @@ public class MainMenuPanel extends JPanel {
             
         };
     }
+    
+    public void setMainContentVisible(){
+            mainContent.setVisible(true);
+    }
     private MouseAdapter accountButtonAction(){  
         return new MouseAdapter(){
             @Override
@@ -442,6 +490,7 @@ public class MainMenuPanel extends JPanel {
                         xBoxCheck.setVisible(false);
                         pSCheck.setVisible(false);
                         filterRange.setVisible(false);
+                        accountPanel.sideMenuOnSettings();
                     }      
                 }else{
                     sideMenuWidth -= animationSpeed;
@@ -452,6 +501,7 @@ public class MainMenuPanel extends JPanel {
                         xBoxCheck.setVisible(true);
                         pSCheck.setVisible(true);
                         filterRange.setVisible(true);
+                        accountPanel.sideMenuOffSettings();
                         
                     }
                 }
@@ -462,13 +512,13 @@ public class MainMenuPanel extends JPanel {
         });
         animationTimer.start();
     }
-    private AccountPanel accountPanel = new AccountPanel();
+    private AccountPanel accountPanel;
     private GradientPanel sideMenu = new GradientPanel(new Color(10,15,30), new Color(55, 40, 80), RADIAL);
     private JPanel mainContent = new JPanel();
     private GradientPanel topPanel = new GradientPanel(new Color(10, 15, 30), new Color(35, 40, 60), RADIAL);
     private IconButton sideMenuButton = new IconButton("images/sideMenuButtonIcon.png", 48, 48);
     private IconButton sideMenuCloseButton = new IconButton("images/backIcon.png",50, 50);
-    private IconButton accountButton = new IconButton("images/myAcountIcon.png",100, 100);
+    private IconButton accountButton;
     private Timer animationTimer;
     private int sideMenuWidth = 0;
     private boolean sideMenuOpen = false;

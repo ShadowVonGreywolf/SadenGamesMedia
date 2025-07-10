@@ -6,6 +6,8 @@ package com.mycompany.sadengamesmedia;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.io.File;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 public class testClass extends JFrame {
     private final JPanel sideMenu = new JPanel();
@@ -30,6 +32,29 @@ public class testClass extends JFrame {
         setupOpenButton();
 
         setVisible(true);
+        
+//        JFileChooser fileChooser = new JFileChooser();
+//        fileChooser.setDialogTitle("Select Profile Picture");
+//        fileChooser.setBounds(100, 100, 100, 100);
+//        fileChooser.setVisible(true);
+//        add(fileChooser);
+        
+        FileDialog fileDialog = new FileDialog((Frame) null, "Select Profile Picture", FileDialog.LOAD);
+        fileDialog.setVisible(true);
+        fileDialog.setBounds(100, 100, 100, 100);
+        add(fileDialog);
+
+        String selectedFile = fileDialog.getFile();
+        String selectedDir = fileDialog.getDirectory();
+
+        if (selectedFile != null) {
+            File file = new File(selectedDir, selectedFile);
+            ///storeImageInDatabase(file); // 🖼️ Your method to handle DB insert/update
+        }
+
+
+       
+        
     }
 
     private void setupDrawer() {

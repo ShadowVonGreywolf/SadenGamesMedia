@@ -6,6 +6,8 @@ package com.mycompany.sadengamesmedia;
 
 import com.mycompany.components.IconButton;
 import com.mycompany.components.ImagePanel;
+import com.mycompany.sadengamesmedia.model.Session;
+import com.mycompany.sadengamesmedia.model.User;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -16,7 +18,9 @@ import java.awt.event.MouseEvent;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -197,20 +201,26 @@ public class SignUpPanel extends JPanel{
                             passwordText.setBorder(new LineBorder(Color.WHITE, 2));
                             usernameText.setBorder(new LineBorder(Color.WHITE, 2));
                             Connection conn = DatabaseManager.getConnection();
-                            PreparedStatement stmt = conn.prepareStatement("INSERT INTO accounts (username, email, password) VALUES (?, ?, ?)");
+                            PreparedStatement stmt = conn.prepareStatement("INSERT INTO accounts (username, email, password) VALUES (?, ?, ?)" , Statement.RETURN_GENERATED_KEYS);
                             stmt.setString(1, username);
                             stmt.setString(2, email);
                             stmt.setString(3, password);
                             int rowsInserted = stmt.executeUpdate();
                             if (rowsInserted > 0) {
+                                 ResultSet generated = stmt.getGeneratedKeys();
+                                if (generated.next()) {
+                                    int id = generated.getInt(1);
+                                    String role = "user";
+                                    Session.login(new User(id, username, email, password, role, null));
+                                }
                                 System.out.println("Successful creation of account !");
                                 JOptionPane.showMessageDialog(null,"Successful registration!","Well done",JOptionPane.INFORMATION_MESSAGE);
                                 sgm.showPanel("mainMenu");
                             }
-                            }catch(SQLException ex){
-                                JOptionPane.showMessageDialog(null,"Error! Account already in use!","Account error",JOptionPane.ERROR_MESSAGE);
-                            }        
-                        }
+                        }catch(SQLException ex){
+                            JOptionPane.showMessageDialog(null,"Error! Account already in use!","Account error",JOptionPane.ERROR_MESSAGE);
+                        }        
+                    }
                 else
                     JOptionPane.showMessageDialog(null,"Error! Invalid email credentials!","Account error",JOptionPane.ERROR_MESSAGE);
             }
@@ -224,10 +234,10 @@ public class SignUpPanel extends JPanel{
                 passwordClicked = !passwordClicked;
                 if(passwordClicked){
                    passwordText.setEchoChar((char) 0); 
-                   showPasswordButton.setNewIcon("images/visibilityOn.png");
+                   showPasswordButton.setNewIcon("images/visibilityOn.png", 25 ,25 );
                 }else{
                     passwordText.setEchoChar('*');
-                    showPasswordButton.setNewIcon("images/visibilityOff.png");
+                    showPasswordButton.setNewIcon("images/visibilityOff.png", 25, 25);
                 }
                 
                 
@@ -242,10 +252,10 @@ public class SignUpPanel extends JPanel{
                 confirmPasswordClicked = !confirmPasswordClicked;
                 if(confirmPasswordClicked){
                    confirmPasswordText.setEchoChar((char) 0); 
-                   showConfirmedPasswordButton.setNewIcon("images/visibilityOn.png");
+                   showConfirmedPasswordButton.setNewIcon("images/visibilityOn.png", 25, 25);
                 }else{
                     confirmPasswordText.setEchoChar('*');
-                    showConfirmedPasswordButton.setNewIcon("images/visibilityOff.png");
+                    showConfirmedPasswordButton.setNewIcon("images/visibilityOff.png", 25, 25);
                 }
                 
                 

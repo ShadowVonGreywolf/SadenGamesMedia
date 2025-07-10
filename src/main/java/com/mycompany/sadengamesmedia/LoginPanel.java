@@ -6,6 +6,8 @@ package com.mycompany.sadengamesmedia;
 
 import com.mycompany.components.IconButton;
 import com.mycompany.components.ImagePanel;
+import com.mycompany.sadengamesmedia.model.Session;
+import com.mycompany.sadengamesmedia.model.User;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -144,10 +146,10 @@ public class LoginPanel extends JPanel{
                 passwordClicked = !passwordClicked;
                 if(passwordClicked){
                    passwordText.setEchoChar((char) 0); 
-                   showPasswordButton.setNewIcon("images/visibilityOn.png");
+                   showPasswordButton.setNewIcon("images/visibilityOn.png", 25, 25);
                 }else{
                     passwordText.setEchoChar('*');
-                    showPasswordButton.setNewIcon("images/visibilityOff.png");
+                    showPasswordButton.setNewIcon("images/visibilityOff.png", 25, 25);
                 }
                 
                 
@@ -189,7 +191,16 @@ public class LoginPanel extends JPanel{
                     if (rs.next()) {
                         System.out.println("Login successful!");
                         errorLabel.setVisible(false);
+                        int id = rs.getInt("account_id");
+                        String username = rs.getString("username");
+                        String role = rs.getString("role");
+                        String imagePath = rs.getString("imagePath");
+                        Session.login(new User(id, username, email, password, role, imagePath));
                         sgm.showPanel("mainMenu");
+                        MainMenuPanel mainMenu = (MainMenuPanel) sgm.getMainMenuPanel();
+                        mainMenu.loadProfileImage();
+                        mainMenu.setMainContentVisible();
+                        logoutSettings();
                         
                     } else {
                         System.out.println("Invalid credentials.");
@@ -227,6 +238,14 @@ public class LoginPanel extends JPanel{
         emailText.setBorder(new LineBorder(Color.WHITE, 2));
         passwordText.setBorder(new LineBorder(Color.WHITE, 2));
     } 
+    
+    public void logoutSettings(){
+    
+        emailText.setText("email address");
+        passwordText.setText("password");
+    
+    }
+    
     
     private final JPanel formPanel = new JPanel();
     private final JLabel titleLabel = new JLabel("LOGIN");

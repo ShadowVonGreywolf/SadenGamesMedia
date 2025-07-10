@@ -16,10 +16,19 @@ import javax.swing.JPanel;
 public class SadenGamesMedia extends JFrame {
     private CardLayout cardLayout = new CardLayout();
     private JPanel cardPanel;
+    LoginPanel loginPanel = new LoginPanel(this);
+    SignUpPanel signUpPanel = new SignUpPanel(this);
+    MainMenuPanel mainMenuPanel = new MainMenuPanel(this);
+    
     
     public SadenGamesMedia() throws SQLException{
     initComponents();
     }
+    
+    public MainMenuPanel getMainMenuPanel() {
+        return mainMenuPanel;
+    }
+    
     public void showPanel(String name) {
         cardLayout.show(cardPanel, name);
     }
@@ -34,9 +43,7 @@ public class SadenGamesMedia extends JFrame {
         
         
         cardPanel = new JPanel(cardLayout);
-        LoginPanel loginPanel = new LoginPanel(this);
-        SignUpPanel signUpPanel = new SignUpPanel(this);
-        MainMenuPanel mainMenuPanel = new MainMenuPanel(this);
+        
         cardPanel.add(loginPanel, "login");
         cardPanel.add(signUpPanel, "signUp");
         cardPanel.add(mainMenuPanel, "mainMenu");
