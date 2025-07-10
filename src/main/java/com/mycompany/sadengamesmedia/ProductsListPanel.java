@@ -6,16 +6,22 @@ package com.mycompany.sadengamesmedia;
 
 import com.mycompany.components.ProductCardPanel;
 import com.mycompany.components.WrapLayout;
+import com.mycompany.sadengamesmedia.model.Movie;
 import com.mycompany.sadengamesmedia.model.ProductItem;
 import com.mycompany.sadengamesmedia.model.Videogame;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import javax.swing.JButton;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.plaf.basic.BasicScrollBarUI;
@@ -204,6 +210,76 @@ public class ProductsListPanel extends JPanel{
     productsContainer.revalidate();
     productsContainer.repaint();
     }
+    
+    public void reloadAllProducts() {
+        productsContainer.removeAll();
+        gettingList.clear();
+
+        try (Connection conn = DatabaseManager.getConnection();
+             PreparedStatement stmt = conn.prepareStatement("SELECT * FROM products");
+             ResultSet rs = stmt.executeQuery()) {
+
+            while (rs.next()) {
+                int id = rs.getInt("id");
+                String title = rs.getString("title");
+                String genre = rs.getString("genre");
+                float rating = rs.getFloat("rating");
+                String description = rs.getString("description");
+                double price = rs.getDouble("price");
+                String imagePath = rs.getString("image_path");
+                String type = rs.getString("product_type");
+
+                if ("Videogame".equalsIgnoreCase(type)) {
+                    try (PreparedStatement vgStmt = conn.prepareStatement(
+                            "SELECT platform, studio FROM games WHERE games_id = ?")) {
+                        vgStmt.setInt(1, id);
+                        try (ResultSet vgRs = vgStmt.executeQuery()) {
+                            if (vgRs.next()) {
+                                String platform = vgRs.getString("platform");
+                                String studio = vgRs.getString("studio");
+
+                                Videogame vg = new Videogame(id, title, genre, rating, description, price, imagePath, type, platform, studio);
+                                gettingList.add(vg);
+                                productsContainer.add(new ProductCardPanel(vg.getTitle(), vg.getRating(), vg.getPrice(), vg.getImagePath()));
+                            } else {
+                                System.out.println("No videogame data found for games_id " + id);
+                            }
+                        }
+                    }
+                } else if ("Movie".equalsIgnoreCase(type)) {
+                    try (PreparedStatement mvStmt = conn.prepareStatement(
+                            "SELECT director, duration FROM movies WHERE movie_id = ?")) {
+                        mvStmt.setInt(1, id);
+                        try (ResultSet mvRs = mvStmt.executeQuery()) {
+                            if (mvRs.next()) {
+                                String director = mvRs.getString("director");
+                                int duration = mvRs.getInt("duration");
+
+                                Movie mv = new Movie(id, title, genre, rating, description, price, imagePath, type, director, duration);
+                                gettingList.add(mv);
+                                productsContainer.add(new ProductCardPanel(mv.getTitle(), mv.getRating(), mv.getPrice(), mv.getImagePath()));
+                            } else {
+                                System.out.println("No movie data found for movie_id " + id);
+                            }
+                        }
+                    }
+                }
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(null, "Failed to load products from database.", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+
+        productsContainer.revalidate();
+        productsContainer.repaint();
+    }
+
+
+    
+    
+    
+    
     
     public ProductsListPanel(List<ProductItem> productList) {
         setLayout(new BorderLayout());

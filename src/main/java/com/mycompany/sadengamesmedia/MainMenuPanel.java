@@ -376,10 +376,74 @@ public class MainMenuPanel extends JPanel {
         filterRange.addMouseListener(rangeAction());
         mainContent.add(filterRange);
         
+        addItem.setVisible(true);
+        addItem.setForeground(Color.CYAN);
+        addItem.setFont(new Font("Arial", Font.BOLD, 15));
+        addItem.setBackground(new Color(10,60,40));
+        addItem.setOpaque(true);
+        addItem.setContentAreaFilled(true);           
+        addItem.setBorderPainted(false);
+        addItem.setFocusPainted(false);
+        addItem.setBounds(10, 500, 180, 50);
+        addItem.addMouseListener(addItemAction(addItem));
+        mainContent.add(addItem);
         
         
+        refreshList.setVisible(true);
+        refreshList.setForeground(Color.CYAN);
+        refreshList.setFont(new Font("Arial", Font.BOLD, 15));
+        refreshList.setBackground(new Color(10,25,40));
+        refreshList.setOpaque(true);
+        refreshList.setContentAreaFilled(true);           
+        refreshList.setBorderPainted(false);
+        refreshList.setFocusPainted(false);
+        refreshList.setBounds(10, 570, 180, 50);
+        refreshList.addMouseListener(refreshButtonAction());
+        mainContent.add(refreshList);
+        
+        deleteItem.setVisible(true);
+        deleteItem.setForeground(Color.CYAN);
+        deleteItem.setFont(new Font("Arial", Font.BOLD, 15));
+        deleteItem.setBackground(new Color(80,25,40));
+        deleteItem.setOpaque(true);
+        deleteItem.setContentAreaFilled(true);           
+        deleteItem.setBorderPainted(false);
+        deleteItem.setFocusPainted(false);
+        deleteItem.setBounds(10, 640, 180, 50);
+        mainContent.add(deleteItem);
         
         
+        addProductPanel.setBounds(200, 100, 970, 600);
+        mainContent.add(addProductPanel);
+        
+    }
+    
+    private MouseAdapter refreshButtonAction(){
+        return new MouseAdapter(){
+            public void mouseClicked(MouseEvent e){
+                productsPanel.reloadAllProducts();
+            }
+        };
+    }
+    
+    private boolean addItemClicked = false;
+    private MouseAdapter addItemAction(JButton a){
+        return new MouseAdapter(){
+            public void mouseClicked(MouseEvent e){
+                addItemClicked = !addItemClicked;
+                if(addItemClicked){
+                    productsPanel.setVisible(false);
+                    addProductPanel.setVisible(true);
+                    a.setBackground(new Color(100,25,40));
+                    a.setText("Cancel");
+                }else{
+                    addProductPanel.setVisible(false);
+                    productsPanel.setVisible(true);
+                    a.setBackground(new Color(10,60,40));
+                    a.setText("Add your product");
+                }
+            }
+        };
     }
     
     private FocusListener searchBarFocusListener(JTextField a){
@@ -491,6 +555,8 @@ public class MainMenuPanel extends JPanel {
                         pSCheck.setVisible(false);
                         filterRange.setVisible(false);
                         accountPanel.sideMenuOnSettings();
+                        deleteItem.setVisible(false);
+                        addItem.setVisible(false);
                     }      
                 }else{
                     sideMenuWidth -= animationSpeed;
@@ -502,6 +568,8 @@ public class MainMenuPanel extends JPanel {
                         pSCheck.setVisible(true);
                         filterRange.setVisible(true);
                         accountPanel.sideMenuOffSettings();
+                        deleteItem.setVisible(true);
+                        addItem.setVisible(true);
                         
                     }
                 }
@@ -512,6 +580,7 @@ public class MainMenuPanel extends JPanel {
         });
         animationTimer.start();
     }
+    
     private AccountPanel accountPanel;
     private GradientPanel sideMenu = new GradientPanel(new Color(10,15,30), new Color(55, 40, 80), RADIAL);
     private JPanel mainContent = new JPanel();
@@ -552,5 +621,9 @@ public class MainMenuPanel extends JPanel {
     private JTextField ratingMinText = new JTextField();
     private JTextField ratingMaxText = new JTextField();
     private JButton filterRange = new JButton("Apply range filter");
+    private JButton addItem = new JButton("Add your product");
+    private JButton deleteItem = new JButton("Delete");
+    private AddProductPanel addProductPanel = new AddProductPanel();
+    private JButton refreshList = new JButton("Refresh");
     
 }
