@@ -58,6 +58,13 @@ public class MainMenuPanel extends JPanel {
             System.out.println("inainte de test ");
             String path = Paths.get(System.getProperty("user.dir"), "profile_images", "myAccountIcon.png").toString();
             if (user != null) {
+                if(!Session.getCurrentUser().getRole().toLowerCase().equals("admin")){
+                    addItem.setVisible(false);
+                    refresh.setVisible(false);
+                }else{
+                    addItem.setVisible(true);
+                    refresh.setVisible(true);
+                }
                 if(user.getImagePath() != null){
                     System.out.println("trebuie sa mearga imaginea");
                     accountButton.setNewIcon(user.getImagePath(), 100, 100);
@@ -197,12 +204,7 @@ public class MainMenuPanel extends JPanel {
         productType.setFont(new Font("Arial", Font.BOLD ,15));
         productType.setBackground(new Color(30, 35, 60));
         productType.setForeground(Color.WHITE);
-        productType.addActionListener(e -> {
-            String type = (String) productType.getSelectedItem();
-            String price = (String) sortByPrice.getSelectedItem();
-            String rating = (String) sortByRating.getSelectedItem();
-            productsPanel.filterProductListPanel(type, price, rating, allProducts);
-        });
+        productType.addActionListener(comboBoxesAction());
         mainContent.add(productType);
         
         
@@ -217,12 +219,7 @@ public class MainMenuPanel extends JPanel {
         sortByPrice.setFont(new Font("Arial", Font.BOLD ,15));
         sortByPrice.setBackground(new Color(30, 35, 60));
         sortByPrice.setForeground(Color.WHITE);
-        sortByPrice.addActionListener(e -> {
-            String type = (String) productType.getSelectedItem();
-            String price = (String) sortByPrice.getSelectedItem();
-            String rating = (String) sortByRating.getSelectedItem();
-            productsPanel.filterProductListPanel(type, price, rating, allProducts);
-        });
+        sortByPrice.addActionListener(comboBoxesAction());
         mainContent.add(sortByPrice);
         
         
@@ -237,12 +234,7 @@ public class MainMenuPanel extends JPanel {
         sortByRating.setFont(new Font("Arial", Font.BOLD ,15));
         sortByRating.setBackground(new Color(30, 35, 60));
         sortByRating.setForeground(Color.WHITE);
-        sortByRating.addActionListener(e -> {
-            String type = (String) productType.getSelectedItem();
-            String price = (String) sortByPrice.getSelectedItem();
-            String rating = (String) sortByRating.getSelectedItem();
-            productsPanel.filterProductListPanel(type, price, rating, allProducts);
-        });
+        sortByRating.addActionListener(comboBoxesAction());
         mainContent.add(sortByRating);
         
         
@@ -376,7 +368,6 @@ public class MainMenuPanel extends JPanel {
         filterRange.addMouseListener(rangeAction());
         mainContent.add(filterRange);
         
-        addItem.setVisible(true);
         addItem.setForeground(Color.CYAN);
         addItem.setFont(new Font("Arial", Font.BOLD, 15));
         addItem.setBackground(new Color(10,60,40));
@@ -388,43 +379,30 @@ public class MainMenuPanel extends JPanel {
         addItem.addMouseListener(addItemAction(addItem));
         mainContent.add(addItem);
         
-        
-        refreshList.setVisible(true);
-        refreshList.setForeground(Color.CYAN);
-        refreshList.setFont(new Font("Arial", Font.BOLD, 15));
-        refreshList.setBackground(new Color(10,25,40));
-        refreshList.setOpaque(true);
-        refreshList.setContentAreaFilled(true);           
-        refreshList.setBorderPainted(false);
-        refreshList.setFocusPainted(false);
-        refreshList.setBounds(10, 570, 180, 50);
-        refreshList.addMouseListener(refreshButtonAction());
-        mainContent.add(refreshList);
-        
-        deleteItem.setVisible(true);
-        deleteItem.setForeground(Color.CYAN);
-        deleteItem.setFont(new Font("Arial", Font.BOLD, 15));
-        deleteItem.setBackground(new Color(80,25,40));
-        deleteItem.setOpaque(true);
-        deleteItem.setContentAreaFilled(true);           
-        deleteItem.setBorderPainted(false);
-        deleteItem.setFocusPainted(false);
-        deleteItem.setBounds(10, 640, 180, 50);
-        mainContent.add(deleteItem);
-        
-        
         addProductPanel.setBounds(200, 100, 970, 600);
         mainContent.add(addProductPanel);
         
+        
+        refresh.setForeground(Color.CYAN);
+        refresh.setFont(new Font("Arial", Font.BOLD, 15));
+        refresh.setBackground(new Color(40,25,40));
+        refresh.setOpaque(true);
+        refresh.setContentAreaFilled(true);           
+        refresh.setBorderPainted(false);
+        refresh.setFocusPainted(false);
+        refresh.setBounds(10, 600, 180, 50);
+        refresh.addMouseListener(new MouseAdapter(){
+            public void mouseClicked(MouseEvent e){
+                 List<ProductItem> newList = new ArrayList<>();
+                productsPanel.reloadAllProducts(newList);
+            }
+        });
+        mainContent.add(refresh);
+        
+        
+        
     }
     
-    private MouseAdapter refreshButtonAction(){
-        return new MouseAdapter(){
-            public void mouseClicked(MouseEvent e){
-                productsPanel.reloadAllProducts();
-            }
-        };
-    }
     
     private boolean addItemClicked = false;
     private MouseAdapter addItemAction(JButton a){
@@ -434,9 +412,11 @@ public class MainMenuPanel extends JPanel {
                 if(addItemClicked){
                     productsPanel.setVisible(false);
                     addProductPanel.setVisible(true);
+                    addProductPanel.cancelAddAndChangePhotoTrue();
                     a.setBackground(new Color(100,25,40));
                     a.setText("Cancel");
                 }else{
+                    addProductPanel.cancelAddAndChangePhotoFalse();
                     addProductPanel.setVisible(false);
                     productsPanel.setVisible(true);
                     a.setBackground(new Color(10,60,40));
@@ -463,7 +443,19 @@ public class MainMenuPanel extends JPanel {
             }
         };
     } 
-    
+    private ActionListener comboBoxesAction(){
+        return new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e){
+                List<ProductItem> newList = new ArrayList();
+                newList.addAll(productsPanel.getGettingList());
+                String type = (String) productType.getSelectedItem();
+                String price = (String) sortByPrice.getSelectedItem();
+                String rating = (String) sortByRating.getSelectedItem();
+                productsPanel.filterProductListPanel(type, price, rating, newList);
+            }
+        };
+    }
     private ActionListener checkBoxAction(){
         return new ActionListener(){
             @Override
@@ -533,10 +525,27 @@ public class MainMenuPanel extends JPanel {
             @Override
             public void mouseClicked(MouseEvent e){
                 String searchString = searchBarText.getText();
+                List<ProductItem> newList = new ArrayList<>();
+                allProducts.clear();
+                allProducts.addAll(productsPanel.reloadAllProducts(newList));
                 productsPanel.searchProductList(searchString, allProducts);
             }
         };
     }
+    
+    private void addItemRefreshTrue(){
+        if(Session.getCurrentUser().getRole().toLowerCase().equals("admin")){
+            addItem.setVisible(true);
+            refresh.setVisible(true);
+        }
+    }
+    private void addItemRefreshFalse(){
+        if(Session.getCurrentUser().getRole().toLowerCase().equals("admin")){
+            addItem.setVisible(false);
+            refresh.setVisible(false);
+        }
+    }
+    
     private void sideMenuAnimation() {
         
         if (animationTimer != null && animationTimer.isRunning()) return;
@@ -555,8 +564,7 @@ public class MainMenuPanel extends JPanel {
                         pSCheck.setVisible(false);
                         filterRange.setVisible(false);
                         accountPanel.sideMenuOnSettings();
-                        deleteItem.setVisible(false);
-                        addItem.setVisible(false);
+                        addItemRefreshFalse();
                     }      
                 }else{
                     sideMenuWidth -= animationSpeed;
@@ -568,9 +576,7 @@ public class MainMenuPanel extends JPanel {
                         pSCheck.setVisible(true);
                         filterRange.setVisible(true);
                         accountPanel.sideMenuOffSettings();
-                        deleteItem.setVisible(true);
-                        addItem.setVisible(true);
-                        
+                        addItemRefreshTrue();
                     }
                 }
                 sideMenu.setBounds(0, 0, sideMenuWidth, getHeight());
@@ -622,8 +628,7 @@ public class MainMenuPanel extends JPanel {
     private JTextField ratingMaxText = new JTextField();
     private JButton filterRange = new JButton("Apply range filter");
     private JButton addItem = new JButton("Add your product");
-    private JButton deleteItem = new JButton("Delete");
     private AddProductPanel addProductPanel = new AddProductPanel();
-    private JButton refreshList = new JButton("Refresh");
+    private JButton refresh = new JButton("Refresh");
     
 }

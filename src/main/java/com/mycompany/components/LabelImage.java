@@ -22,6 +22,98 @@ public class LabelImage extends JLabel{
     private int width ;
     private int height;
     public LabelImage (String imagePath, int width, int height){
+
+            this.width = width;
+            this.height = height;
+            setNewImage(imagePath, width, height);
+        
+    }
+    public void setNewImage(String imagePath, int width, int height){
+        
+        try {
+        BufferedImage img;
+        File file = new File(imagePath);
+        if (file.exists()) {
+            img = ImageIO.read(file);
+        } else {
+            URL resource = getClass().getClassLoader().getResource(imagePath);
+            if (resource != null) {
+                img = ImageIO.read(resource);
+            } else {
+                throw new IOException("Image not found: " + imagePath);
+            }
+        }
+
+        Image scaled = img.getScaledInstance(width, height, Image.SCALE_SMOOTH);
+        setIcon(new ImageIcon(scaled));
+        setText(null);
+        setForeground(Color.BLACK);
+        revalidate();
+        repaint();
+    } catch (IOException e) {
+        e.printStackTrace();
+        setText("Image not found");
+        setForeground(Color.RED);
+    }
+    }
+        
+//        BufferedImage img = null;
+//
+//    try {
+//        URL resource = getClass().getClassLoader().getResource(imagePath);
+//
+//        if (resource != null) {
+//            img = ImageIO.read(resource);
+//        } else {
+//
+//            File file = new File(imagePath);
+//
+//            if (file.exists()) {
+//                img = ImageIO.read(file);
+//            } else {
+//                throw new IOException("Image not found in classpath or file system: " + imagePath);
+//            }
+//        }
+//        Image scaled = img.getScaledInstance(width, height, Image.SCALE_SMOOTH);
+//        setIcon(new ImageIcon(scaled));
+//        setText(null);
+//        revalidate();
+//        repaint();
+//
+//    } catch (IOException e) {
+//        e.printStackTrace();
+//        setText("Image not found");
+//        setForeground(Color.RED);
+//    }
+//}
+    public void loadPreviewFromFile(File imageFile, int width, int height) {
+        try {
+            if (imageFile != null && imageFile.exists()) {
+                BufferedImage img = ImageIO.read(imageFile);
+                Image scaled = img.getScaledInstance(width, height, Image.SCALE_SMOOTH);
+                setIcon(new ImageIcon(scaled));
+                setText(null);
+                setForeground(Color.BLACK);
+                revalidate();
+                repaint();
+            } else {
+                throw new IOException("Preview file doesn't exist: " + imageFile);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+            setText("Preview failed");
+            setForeground(Color.RED);
+        }
+   }
+        
+        
+    
+}
+
+
+
+
+
 //        URL imgURL = getClass().getResource("/" + imagePath);
 //        if (imgURL != null) {
 //            ImageIcon icon = new ImageIcon(imgURL);
@@ -31,59 +123,9 @@ public class LabelImage extends JLabel{
 //            setText("Image not found");
 //            setForeground(Color.RED);
 //        }
-            this.width = width;
-            this.height = height;
-            setNewImage(imagePath, width, height);
-        
-    }
-    public void setNewImage(String imagePath, int width, int height){
-        
-        BufferedImage img = null;
 
-    try {
-        System.out.println("Trying to load image from classpath: " + imagePath);
-        // Try classpath resource (no leading slash!)
-        URL resource = getClass().getClassLoader().getResource(imagePath);
 
-        if (resource != null) {
-            System.out.println("Found image in classpath: " + resource);
-            img = ImageIO.read(resource);
-        } else {
-            System.out.println("Image not found in classpath, trying file system...");
 
-            File file = new File(imagePath);
-            System.out.println("File path to check: " + file.getAbsolutePath());
-
-            if (file.exists()) {
-                System.out.println("Found image in file system");
-                img = ImageIO.read(file);
-            } else {
-                throw new IOException("Image not found in classpath or file system: " + imagePath);
-            }
-        }
-
-        // Resize and set icon
-        Image scaled = img.getScaledInstance(width, height, Image.SCALE_SMOOTH);
-        setIcon(new ImageIcon(scaled));
-        setText(null);
-        revalidate();
-        repaint();
-
-    } catch (IOException e) {
-        e.printStackTrace();
-        setText("Image not found");
-        setForeground(Color.RED);
-    }
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
 //        try {
 //        BufferedImage img = null;
 //
@@ -110,25 +152,3 @@ public class LabelImage extends JLabel{
 //        setText("Image not found");
 //        setForeground(Color.RED);
 //    }
-}
-        public void loadPreviewFromFile(File imageFile, int width, int height) {
-        try {
-            if (imageFile != null && imageFile.exists()) {
-                BufferedImage img = ImageIO.read(imageFile);
-                Image scaled = img.getScaledInstance(width, height, Image.SCALE_SMOOTH);
-                setIcon(new ImageIcon(scaled));
-                setText(null);
-                setForeground(Color.BLACK);
-                revalidate();
-                repaint();
-            } else {
-                throw new IOException("Preview file doesn't exist: " + imageFile);
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-            setText("Preview failed");
-            setForeground(Color.RED);
-        }
-    }
-    
-}

@@ -13,6 +13,9 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.nio.file.Paths;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -47,6 +50,7 @@ public class ProductsListPanel extends JPanel{
 
                         if (vg.getPlatform().toLowerCase().contains("ps") || vg.getPlatform().toLowerCase().contains("xbox")) {
                             ProductCardPanel card = new ProductCardPanel(vg.getTitle(), vg.getRating(), vg.getPrice(), vg.getImagePath());
+                            card.addMouseListener(isClicked(p));
                             productsContainer.add(card);
                         }
                     }
@@ -58,6 +62,7 @@ public class ProductsListPanel extends JPanel{
 
                         if (vg.getPlatform().toLowerCase().contains("ps")) {
                             ProductCardPanel card = new ProductCardPanel(vg.getTitle(), vg.getRating(), vg.getPrice(), vg.getImagePath());
+                            card.addMouseListener(isClicked(p));
                             productsContainer.add(card);
                         }
                     }
@@ -69,13 +74,15 @@ public class ProductsListPanel extends JPanel{
 
                             if (vg.getPlatform().toLowerCase().contains("xbox")) {
                                 ProductCardPanel card = new ProductCardPanel(vg.getTitle(), vg.getRating(), vg.getPrice(), vg.getImagePath());
+                                card.addMouseListener(isClicked(p));
                                 productsContainer.add(card);
                             }
                         }
                     }    
-                }else {
+                }else if(xBox == false && ps == false){
                     for(ProductItem p : list){
                         ProductCardPanel card = new ProductCardPanel(p.getTitle(), p.getRating(), p.getPrice(), p.getImagePath());
+                        card.addMouseListener(isClicked(p));
                         productsContainer.add(card);
                     }
             }
@@ -87,12 +94,14 @@ public class ProductsListPanel extends JPanel{
         for (ProductItem p : productList) {
             if (p.getTitle().toLowerCase().contains(searchString)) {
                 ProductCardPanel card = new ProductCardPanel(p.getTitle(), p.getRating(), p.getPrice(), p.getImagePath());
+                card.addMouseListener(isClicked(p));
                 productsContainer.add(card);
             }
         }
         if(searchString.equals("Search"))
             for (ProductItem p : productList) {
                 ProductCardPanel card = new ProductCardPanel(p.getTitle(), p.getRating(), p.getPrice(), p.getImagePath());
+                card.addMouseListener(isClicked(p));
                 productsContainer.add(card);
             }
         productsContainer.revalidate();
@@ -147,6 +156,7 @@ public class ProductsListPanel extends JPanel{
         
         for (ProductItem p : filteredList) { 
             ProductCardPanel card = new ProductCardPanel(p.getTitle(), p.getRating(), p.getPrice(), p.getImagePath());
+            card.addMouseListener(isClicked(p));
             productsContainer.add(card);
         }
         
@@ -170,6 +180,7 @@ public class ProductsListPanel extends JPanel{
         if(minPrice == 0 && maxPrice == 0 && minRating == 0 && maxRating == 0){
             for (ProductItem p : list) {
                 ProductCardPanel card = new ProductCardPanel(p.getTitle(), p.getRating(), p.getPrice(), p.getImagePath());
+                card.addMouseListener(isClicked(p));
                 productsContainer.add(card);
             }
             productsContainer.revalidate();
@@ -203,6 +214,7 @@ public class ProductsListPanel extends JPanel{
 
         if (matches == true) {
             ProductCardPanel card = new ProductCardPanel(p.getTitle(), rating, price, p.getImagePath());
+            card.addMouseListener(isClicked(p));
             productsContainer.add(card);
         }
     }
@@ -211,7 +223,7 @@ public class ProductsListPanel extends JPanel{
     productsContainer.repaint();
     }
     
-    public void reloadAllProducts() {
+    public List<ProductItem> reloadAllProducts(List<ProductItem> list) {
         productsContainer.removeAll();
         gettingList.clear();
 
@@ -228,6 +240,7 @@ public class ProductsListPanel extends JPanel{
                 double price = rs.getDouble("price");
                 String imagePath = rs.getString("image_path");
                 String type = rs.getString("product_type");
+                int stock = rs.getInt("stock");
 
                 if ("Videogame".equalsIgnoreCase(type)) {
                     try (PreparedStatement vgStmt = conn.prepareStatement(
@@ -237,10 +250,15 @@ public class ProductsListPanel extends JPanel{
                             if (vgRs.next()) {
                                 String platform = vgRs.getString("platform");
                                 String studio = vgRs.getString("studio");
-
-                                Videogame vg = new Videogame(id, title, genre, rating, description, price, imagePath, type, platform, studio);
+                                String fullImagePath = Paths.get(System.getProperty("user.dir"), "src", "main", "resources", imagePath).toString();
+                                Videogame vg = new Videogame(id, title, genre, rating, description, price, fullImagePath, type, stock, platform, studio);
                                 gettingList.add(vg);
-                                productsContainer.add(new ProductCardPanel(vg.getTitle(), vg.getRating(), vg.getPrice(), vg.getImagePath()));
+                                list.add(vg);
+                                ProductItem p = new ProductItem(id, title, genre, rating, description, price, fullImagePath, type, stock);
+                                ProductCardPanel card = new ProductCardPanel(vg.getTitle(), vg.getRating(), vg.getPrice(), fullImagePath);
+                                card.addMouseListener(isClicked(p));
+                                productsContainer.add(card);
+
                             } else {
                                 System.out.println("No videogame data found for games_id " + id);
                             }
@@ -254,10 +272,15 @@ public class ProductsListPanel extends JPanel{
                             if (mvRs.next()) {
                                 String director = mvRs.getString("director");
                                 int duration = mvRs.getInt("duration");
-
-                                Movie mv = new Movie(id, title, genre, rating, description, price, imagePath, type, director, duration);
+                                
+                                String fullImagePath = Paths.get(System.getProperty("user.dir"), "src", "main", "resources", imagePath).toString();
+                                Movie mv = new Movie(id, title, genre, rating, description, price, fullImagePath, type, stock, director, duration);
                                 gettingList.add(mv);
-                                productsContainer.add(new ProductCardPanel(mv.getTitle(), mv.getRating(), mv.getPrice(), mv.getImagePath()));
+                                list.add(mv);
+                                ProductItem p = new ProductItem(id, title, genre, rating, description, price, fullImagePath, type, stock);
+                                ProductCardPanel card = new ProductCardPanel(mv.getTitle(), mv.getRating(), mv.getPrice(), mv.getImagePath()) ;
+                                card.addMouseListener(isClicked(p));
+                                productsContainer.add(card);
                             } else {
                                 System.out.println("No movie data found for movie_id " + id);
                             }
@@ -270,20 +293,43 @@ public class ProductsListPanel extends JPanel{
             e.printStackTrace();
             JOptionPane.showMessageDialog(null, "Failed to load products from database.", "Error", JOptionPane.ERROR_MESSAGE);
         }
-
+        
         productsContainer.revalidate();
         productsContainer.repaint();
+        return list;
     }
+    
+    private MouseAdapter isClicked(ProductItem p){
+        return new MouseAdapter(){
+            public void mouseClicked(MouseEvent e){
+                remove(cardPage); 
+                cardPage = new CardPage(p, ProductsListPanel.this, scrollPane); 
+                cardPage.setBounds(0, 0, 970, 600); 
+                
+                cardPage.deleteModifyBackBuyTrue();
+                cardPage.setVisible(true);
+                add(cardPage); 
+                scrollPane.setVisible(false);
 
-
+                revalidate();
+                repaint();
+                
+            }
+        };
+    }
     
-    
-    
+    public void scrollPaneTrue(){
+        scrollPane.setVisible(true);
+        revalidate();
+        repaint();
+    }
     
     
     public ProductsListPanel(List<ProductItem> productList) {
-        setLayout(new BorderLayout());
+        setLayout(null);
 
+        
+        
         gettingList.clear();
         gettingList.addAll(productList);
         productsContainer.setLayout(new WrapLayout(FlowLayout.LEFT, 30, 20)); 
@@ -291,6 +337,7 @@ public class ProductsListPanel extends JPanel{
 
         for (ProductItem p : productList) { 
             ProductCardPanel card = new ProductCardPanel(p.getTitle(), p.getRating(), p.getPrice(), p.getImagePath());
+            card.addMouseListener(isClicked(p));
             productsContainer.add(card);
         }
 
@@ -304,11 +351,9 @@ public class ProductsListPanel extends JPanel{
                 this.thumbColor = new Color(0,0,130);
             }
         });
-
         scrollPane.setBackground(Color.BLACK);
+        scrollPane.setBounds(0, 0, 970, 600);
         add(scrollPane, BorderLayout.CENTER);
-        
-        
         scrollPane.getVerticalScrollBar().setUI(new BasicScrollBarUI() {
             @Override
             protected void configureScrollBarColors() {
@@ -331,8 +376,16 @@ public class ProductsListPanel extends JPanel{
                 return button;
             }
         });
-
+        
+        cardPage.setVisible(false);
+        cardPage.setBounds(0, 0, 970, 600);
+        
+        add(cardPage);
+        
+        
+        
         
         
     }
+    private CardPage cardPage = new CardPage();;
 }

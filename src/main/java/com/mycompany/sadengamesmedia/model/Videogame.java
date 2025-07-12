@@ -12,10 +12,18 @@ public class Videogame extends ProductItem{
     private String platform;
     private String studio;
 
-    public Videogame(int id, String title, String genre, float rating, String description, double price, String imagePath, String type, String platform, String studio) {
-        super(id, title, genre, rating, description, price, imagePath, type);
+    public Videogame(int id, String title, String genre, float rating, String description, double price, String imagePath, String type, int stock, String platform, String studio) {
+        super(id, title, genre, rating, description, price, imagePath, type, stock);
         this.platform = platform;
         this.studio = studio;
+    }
+
+    public int getStock() {
+        return stock;
+    }
+
+    public void setStock(int stock) {
+        this.stock = stock;
     }
 
     public String getType() {

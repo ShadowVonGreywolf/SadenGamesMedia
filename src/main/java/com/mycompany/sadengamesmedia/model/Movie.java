@@ -12,10 +12,18 @@ public class Movie extends ProductItem {
     private String director ;
     private int duration;
 
-    public Movie(int id, String title, String genre, float rating, String description, double price, String imagePath, String type, String director, int duration) {
-        super(id, title, genre, rating, description, price, imagePath, type);
+    public Movie(int id, String title, String genre, float rating, String description, double price, String imagePath, String type, int stock, String director, int duration) {
+        super(id, title, genre, rating, description, price, imagePath, type, stock);
         this.director = director;
         this.duration = duration;
+    }
+
+    public int getStock() {
+        return stock;
+    }
+
+    public void setStock(int stock) {
+        this.stock = stock;
     }
 
     public String getType() {

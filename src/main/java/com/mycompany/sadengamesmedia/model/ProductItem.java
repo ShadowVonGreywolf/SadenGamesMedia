@@ -16,7 +16,7 @@ import java.util.List;
  *
  * @author denia
  */
-public abstract class ProductItem {
+public  class ProductItem {
     
     protected int id;
     protected String title;
@@ -26,8 +26,9 @@ public abstract class ProductItem {
     protected String description;
     protected float rating;
     protected String type;
+    protected int stock;
 
-    public ProductItem(int id, String title, String genre, float rating, String description, double price, String imagePath, String type ) {
+    public ProductItem(int id, String title, String genre, float rating, String description, double price, String imagePath, String type, int stock ) {
         this.id = id;
         this.title = title;
         this.genre = genre;
@@ -36,8 +37,16 @@ public abstract class ProductItem {
         this.price = price;
         this.description = description;
         this.type = type;
+        this.stock = stock;
     }
-    //public abstract String getType();
+
+    public int getStock() {
+        return stock;
+    }
+
+    public void setStock(int stock) {
+        this.stock = stock;
+    }
     
     public String getType() {
         return type;
@@ -106,18 +115,17 @@ public abstract class ProductItem {
         List<ProductItem> result = new ArrayList<>();
         Connection conn = DatabaseManager.getConnection();
         PreparedStatement stmt = conn.prepareStatement("SELECT * FROM products");
-
         ResultSet rs = stmt.executeQuery();
         while (rs.next()) {
             int id = rs.getInt("id");
             String title = rs.getString("title");
             String genre = rs.getString("genre");
             float rating = rs.getFloat("rating");
-            
             String description = rs.getString("description");
             double price = rs.getDouble("price");
             String imagePath = rs.getString("image_path");
             String type = rs.getString("product_type");
+            int stock = rs.getInt("stock");
             
             if (type.equals("Movie")) {
                 int productId = id;
@@ -132,7 +140,7 @@ public abstract class ProductItem {
                 movieRs.close();
                 movieStmt.close();
             
-                Movie movie = new Movie(id, title, genre, rating, description, price, imagePath, type, director, duration);
+                Movie movie = new Movie(id, title, genre, rating, description, price, imagePath, type, stock, director, duration);
                 
                 result.add(movie);
             } else if (type.equals("Videogame")) {
@@ -147,7 +155,7 @@ public abstract class ProductItem {
                 }
                 videogameRs.close();
                 videogameStmt.close();
-                Videogame game = new Videogame(id, title, genre, rating, description, price, imagePath, type, platform, studio);
+                Videogame game = new Videogame(id, title, genre, rating, description, price, imagePath, type, stock, platform, studio);
                 result.add(game);
             }
         }

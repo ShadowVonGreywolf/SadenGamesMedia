@@ -59,7 +59,7 @@ public class AddProductPanel extends JPanel{
         add(productImage);
         
         
-        choosePhoto.setVisible(true);
+        choosePhoto.setVisible(false);
         choosePhoto.setForeground(Color.CYAN);
         choosePhoto.setFont(new Font("Arial", Font.BOLD, 15));
         choosePhoto.setBackground(new Color(10,25,40));
@@ -159,6 +159,23 @@ public class AddProductPanel extends JPanel{
         genreText.setVisible(true);
         genreText.addFocusListener(textFieldEmptier(genreText));
         add(genreText);
+        
+        
+        stockLabel.setVisible(true);
+        stockLabel.setBounds(810, 110, 150, 50);
+        stockLabel.setFont(new Font("Courier New", Font.BOLD, 30));
+        stockLabel.setForeground(new Color(102, 100, 204));
+        add(stockLabel);
+        
+        
+        stockText.setBounds(810, 170, 80, 50);
+        stockText.setBackground(new Color(10,25,40));
+        stockText.setForeground(Color.CYAN);
+        stockText.setFont(new Font("Courier New", Font.ITALIC, 20));
+        stockText.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
+        stockText.setVisible(true);
+        stockText.addFocusListener(textFieldEmptier(genreText));
+        add(stockText);
         
         
         ratingLabel.setVisible(true);
@@ -278,8 +295,8 @@ public class AddProductPanel extends JPanel{
         durationText.addFocusListener(textFieldEmptier(durationText));
         add(durationText);
         
-        JButton addItem = new JButton("Add");
-        addItem.setVisible(true);
+        
+        addItem.setVisible(false);
         addItem.setForeground(Color.CYAN);
         addItem.setFont(new Font("Arial", Font.BOLD, 15));
         addItem.setBackground(new Color(10,60,40));
@@ -291,8 +308,8 @@ public class AddProductPanel extends JPanel{
         addItem.addMouseListener(addItemAction());
         add(addItem);
         
-        JButton cancelItem = new JButton("Cancel");
-        cancelItem.setVisible(true);
+        
+        cancelItem.setVisible(false);
         cancelItem.setForeground(Color.CYAN);
         cancelItem.setFont(new Font("Arial", Font.BOLD, 15));
         cancelItem.setBackground(new Color(90,25,40));
@@ -301,9 +318,56 @@ public class AddProductPanel extends JPanel{
         cancelItem.setBorderPainted(false);
         cancelItem.setFocusPainted(false);
         cancelItem.setBounds(550, 500, 180, 50);
+        cancelItem.addMouseListener(cancelAction() );
         add(cancelItem);
         
     }
+    
+     private MouseAdapter cancelAction() {
+    return new MouseAdapter() {
+        @Override
+        public void mouseClicked(MouseEvent e) {
+            // Reset text fields
+            titleText.setText("Your title");
+            genreText.setText("Your genre");
+            ratingText.setText("Your rating");
+            priceText.setText("Your price");
+            platformText.setText("Your platform");
+            studioText.setText("Your studio");
+            directorText.setText("Your director");
+            durationText.setText("Your duration");
+            descriptionArea.setText("Description");
+            stockText.setText("Stock");
+
+            productType.setSelectedIndex(0);
+
+            productImage.setNewImage("images/myAccountIcon.png", 250, 250);
+            selectedImageFile = null;
+
+            platformLabel.setVisible(false);
+            platformText.setVisible(false);
+            studioLabel.setVisible(false);
+            studioText.setVisible(false);
+            directorLabel.setVisible(false);
+            directorText.setVisible(false);
+            durationLabel.setVisible(false);
+            durationText.setVisible(false);
+
+            }
+        };
+    }
+    public void cancelAddAndChangePhotoTrue(){
+        cancelItem.setVisible(true);
+        addItem.setVisible(true);
+        choosePhoto.setVisible(true);
+    }
+    
+    public void cancelAddAndChangePhotoFalse(){
+        cancelItem.setVisible(false);
+        addItem.setVisible(false);
+        choosePhoto.setVisible(false);
+    }
+    
     private FocusListener textAreaEmptier(JTextArea a){
         return new FocusListener(){
             String string;
@@ -419,15 +483,17 @@ public class AddProductPanel extends JPanel{
                 String description = descriptionArea.getText().trim();
                 String price = priceText.getText().trim();
                 String type = (String) productType.getSelectedItem();
+                String stock = stockText.getText().trim();
 
-                if (title.isEmpty() || genre.isEmpty() || rating.isEmpty() || description.isEmpty() || price.isEmpty() || type == null) {
+                if (title.isEmpty() || genre.isEmpty() || rating.isEmpty() || description.isEmpty() || price.isEmpty() || type == null || stock.isEmpty()) {
                     JOptionPane.showMessageDialog(null,"Please fill out all fields!","Error",JOptionPane.ERROR_MESSAGE);
                     return;
                 }
-                float ratingF; double priceD;
+                float ratingF; double priceD; int stockI;
                 try {
                     ratingF = Float.parseFloat(rating);
                     priceD = Double.parseDouble(price);
+                    stockI = Integer.parseInt(stock);
                 } catch (NumberFormatException ex) {
                     JOptionPane.showMessageDialog(null,"Invalid price format!","Error",JOptionPane.ERROR_MESSAGE);
                     return;
@@ -452,7 +518,7 @@ public class AddProductPanel extends JPanel{
                 }
 
                 try (Connection conn = DatabaseManager.getConnection()) {
-                    String insertProductSQL = "INSERT INTO products (title, genre, rating, description, price, image_path, product_type) VALUES (?, ?, ?, ?, ?, ?, ?)";
+                    String insertProductSQL = "INSERT INTO products (title, genre, rating, description, price, image_path, product_type, stock) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
                     PreparedStatement productStmt = conn.prepareStatement(insertProductSQL, Statement.RETURN_GENERATED_KEYS);
                     productStmt.setString(1, title);
                     productStmt.setString(2, genre);
@@ -461,6 +527,7 @@ public class AddProductPanel extends JPanel{
                     productStmt.setDouble(5, priceD);
                     productStmt.setString(6, imagePathInProject);
                     productStmt.setString(7, type);
+                    productStmt.setInt(8, stockI);
                     productStmt.executeUpdate();
 
                     ResultSet generatedKeys = productStmt.getGeneratedKeys();
@@ -491,7 +558,6 @@ public class AddProductPanel extends JPanel{
                         
                         JOptionPane.showMessageDialog(null,"Product added successfully!","Well done",JOptionPane.INFORMATION_MESSAGE);
                     }
-
                 } catch (SQLException ex) {
                     ex.printStackTrace();
                      JOptionPane.showMessageDialog(null,"Error! Database error.","Account error",JOptionPane.ERROR_MESSAGE);
@@ -528,6 +594,10 @@ public class AddProductPanel extends JPanel{
    private JTextField durationText = new JTextField("Your duration");
    String[] fields = {"Your title","Your genre","Your rating","Your price","Your platform","Your studio","Your director","Your duration"};
    private File selectedImageFile;
+   private JButton cancelItem = new JButton("Cancel");
+   private JButton addItem = new JButton("Add");
+   private JLabel stockLabel = new JLabel("Stock :");
+   private JTextField stockText = new JTextField("Stock");
 }
 
 

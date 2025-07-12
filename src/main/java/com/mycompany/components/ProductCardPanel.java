@@ -29,9 +29,6 @@ import javax.swing.text.StyledDocument;
  */
 public class ProductCardPanel extends JPanel{
     
-    
-    
-    
     public ProductCardPanel(String title, float rating, double price, String imagePath){
         setPreferredSize(new Dimension(270, 320));
         setMaximumSize(new Dimension(270, 320));
