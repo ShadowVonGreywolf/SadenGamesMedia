@@ -174,7 +174,7 @@ public class AddProductPanel extends JPanel{
         stockText.setFont(new Font("Courier New", Font.ITALIC, 20));
         stockText.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
         stockText.setVisible(true);
-        stockText.addFocusListener(textFieldEmptier(genreText));
+        stockText.addFocusListener(textFieldEmptier(stockText));
         add(stockText);
         
         

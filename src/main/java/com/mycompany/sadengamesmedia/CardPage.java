@@ -26,7 +26,6 @@ import java.nio.file.StandardCopyOption;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.sql.Statement;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -633,6 +632,9 @@ public class CardPage extends JPanel{
                 return;
             }
             try (Connection conn = DatabaseManager.getConnection()) {
+                PreparedStatement deleteSales = conn.prepareStatement("DELETE FROM sales WHERE product_id = ?");
+                deleteSales.setInt(1, p.getId());
+                deleteSales.executeUpdate();
                 if ("Videogame".equalsIgnoreCase(p.getType())) {
                     PreparedStatement deleteGame = conn.prepareStatement("DELETE FROM games WHERE games_id = ?");
                     deleteGame.setInt(1, p.getId());

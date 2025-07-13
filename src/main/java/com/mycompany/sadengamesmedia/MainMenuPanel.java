@@ -98,7 +98,6 @@ public class MainMenuPanel extends JPanel {
         sideMenu.setBounds(0, 0, sideMenuWidth, getHeight());
         add(sideMenu);
         
-        mainContent.setBackground(Color.RED);
         mainContent.setBounds(0, 50, 1200, 750);
         mainContent.setLayout(null);
         mainContent.setVisible(true);
@@ -114,6 +113,11 @@ public class MainMenuPanel extends JPanel {
         accountPanel.setBounds(0, 50, 1200, 750);
         accountPanel.setVisible(false);
         add(accountPanel);
+        
+        
+        financePanel.setBounds(0, 50, 1200, 750);
+        financePanel.setVisible(false);
+        add(financePanel);
         
         
         sideMenuButton.setBounds(2, 0, 48, 48);
@@ -159,6 +163,7 @@ public class MainMenuPanel extends JPanel {
         financeButton.setContentAreaFilled(false);           
         financeButton.setBorderPainted(false);
         financeButton.setFocusPainted(false);
+        financeButton.addMouseListener(financeButtonAction());
         sideMenu.add(financeButton);
         
         sideMenu.add(Box.createVerticalStrut(20));
@@ -504,6 +509,7 @@ public class MainMenuPanel extends JPanel {
             @Override
             public void mouseClicked(MouseEvent e){
                 mainContent.setVisible(false);
+                financePanel.setVisible(false);
                 accountPanel.setVisible(true);
                 sideMenuAnimation();
             }
@@ -513,8 +519,19 @@ public class MainMenuPanel extends JPanel {
         return new MouseAdapter(){
             @Override
             public void mouseClicked(MouseEvent e){
+                financePanel.setVisible(false);
                 accountPanel.setVisible(false);
                 mainContent.setVisible(true);
+                sideMenuAnimation();
+            }
+        };
+    }
+    private MouseAdapter financeButtonAction(){
+        return new MouseAdapter(){
+            public void mouseClicked(MouseEvent e){
+                mainContent.setVisible(false);
+                accountPanel.setVisible(false);
+                financePanel.setVisible(true);
                 sideMenuAnimation();
             }
         };
@@ -587,6 +604,7 @@ public class MainMenuPanel extends JPanel {
         animationTimer.start();
     }
     
+    private FinancePanel financePanel = new FinancePanel();
     private AccountPanel accountPanel;
     private GradientPanel sideMenu = new GradientPanel(new Color(10,15,30), new Color(55, 40, 80), RADIAL);
     private JPanel mainContent = new JPanel();
