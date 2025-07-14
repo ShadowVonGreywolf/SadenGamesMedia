@@ -4,6 +4,8 @@
  */
 package com.mycompany.sadengamesmedia.model;
 
+import java.time.LocalDateTime;
+
 /**
  *
  * @author denia
@@ -15,6 +17,7 @@ public class User {
     private String password;
     private String role;
     private String imagePath;
+    private LocalDateTime timestamp;
     
     public User() {
         this.userId = 0;
@@ -25,13 +28,31 @@ public class User {
         this.imagePath = null;
     }
     
-    public User(int userId, String username, String email, String password, String role, String imagePath) {
+    public User(int userId, String username, String email, String password, String role, LocalDateTime timestamp){
+        this.userId = userId;
+        this.username = username;
+        this.email = email;
+        this.password = password;
+        this.role = role;
+        this.timestamp = timestamp;
+    }
+    
+    public User(int userId, String username, String email, String password, String role, String imagePath, LocalDateTime timestamp) {
         this.userId = userId;
         this.username = username;
         this.email = email;
         this.password = password;
         this.role = role;
         this.imagePath = imagePath;
+        this.timestamp = timestamp;
+    }
+
+    public LocalDateTime getTimestamp() {
+        return timestamp;
+    }
+
+    public void setTimestamp(LocalDateTime timestamp) {
+        this.timestamp = timestamp;
     }
     
     public int getUserId() {

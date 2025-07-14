@@ -56,36 +56,6 @@ public class LabelImage extends JLabel{
         setForeground(Color.RED);
     }
     }
-        
-//        BufferedImage img = null;
-//
-//    try {
-//        URL resource = getClass().getClassLoader().getResource(imagePath);
-//
-//        if (resource != null) {
-//            img = ImageIO.read(resource);
-//        } else {
-//
-//            File file = new File(imagePath);
-//
-//            if (file.exists()) {
-//                img = ImageIO.read(file);
-//            } else {
-//                throw new IOException("Image not found in classpath or file system: " + imagePath);
-//            }
-//        }
-//        Image scaled = img.getScaledInstance(width, height, Image.SCALE_SMOOTH);
-//        setIcon(new ImageIcon(scaled));
-//        setText(null);
-//        revalidate();
-//        repaint();
-//
-//    } catch (IOException e) {
-//        e.printStackTrace();
-//        setText("Image not found");
-//        setForeground(Color.RED);
-//    }
-//}
     public void loadPreviewFromFile(File imageFile, int width, int height) {
         try {
             if (imageFile != null && imageFile.exists()) {
@@ -104,51 +74,5 @@ public class LabelImage extends JLabel{
             setText("Preview failed");
             setForeground(Color.RED);
         }
-   }
-        
-        
-    
+   }  
 }
-
-
-
-
-
-//        URL imgURL = getClass().getResource("/" + imagePath);
-//        if (imgURL != null) {
-//            ImageIcon icon = new ImageIcon(imgURL);
-//            Image scaledImage = icon.getImage().getScaledInstance(width, height, Image.SCALE_SMOOTH);
-//            setIcon(new ImageIcon(scaledImage));
-//        } else {
-//            setText("Image not found");
-//            setForeground(Color.RED);
-//        }
-
-
-
-//        try {
-//        BufferedImage img = null;
-//
-//        URL resource = getClass().getClassLoader().getResource(imagePath);
-//        if (resource != null) {
-//            img = ImageIO.read(resource);
-//        } else {
-//            File file = new File(imagePath);
-//            if (file.exists()) {
-//                img = ImageIO.read(file);
-//            } else {
-//                System.out.println(imagePath);
-//                throw new IOException("Image not found in classpath or file system: " + imagePath);
-//            }
-//        }
-//
-//        Image scaled = img.getScaledInstance(width, height, Image.SCALE_SMOOTH);
-//        setIcon(new ImageIcon(scaled));
-//        revalidate();
-//        repaint();
-//
-//    } catch (IOException e) {
-//        e.printStackTrace();
-//        setText("Image not found");
-//        setForeground(Color.RED);
-//    }

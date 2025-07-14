@@ -21,6 +21,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -210,8 +212,10 @@ public class SignUpPanel extends JPanel{
                                  ResultSet generated = stmt.getGeneratedKeys();
                                 if (generated.next()) {
                                     int id = generated.getInt(1);
+                                    Timestamp ts = generated.getTimestamp(6);
+                                    LocalDateTime timestamp = ts.toLocalDateTime();
                                     String role = "user";
-                                    Session.login(new User(id, username, email, password, role, null));
+                                    Session.login(new User(id, username, email, password, role, null, timestamp));
                                 }
                                 System.out.println("Successful creation of account !");
                                 JOptionPane.showMessageDialog(null,"Successful registration!","Well done",JOptionPane.INFORMATION_MESSAGE);

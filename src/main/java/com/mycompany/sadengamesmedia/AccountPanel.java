@@ -23,6 +23,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -313,6 +314,7 @@ public class AccountPanel extends JPanel {
                             stmt.setInt(4, userId);
                             String role = Session.getCurrentUser().getRole();
                             String imagePath = Session.getCurrentUser().getImagePath();
+                            LocalDateTime timestamp = Session.getCurrentUser().getTimestamp();
 
                             int rowsUpdated = stmt.executeUpdate();
                             if (rowsUpdated > 0) {
@@ -320,7 +322,7 @@ public class AccountPanel extends JPanel {
                                 passwordText.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
                                 confirmPasswordText.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
                                 JOptionPane.showMessageDialog(null,"Account updated!","Well done",JOptionPane.INFORMATION_MESSAGE);
-                                User updatedUser = new User(userId, username, email, password, role, imagePath);
+                                User updatedUser = new User(userId, username, email, password, role, imagePath, timestamp);
                                 Session.login(updatedUser);
                             }
                             }catch(SQLException ex){

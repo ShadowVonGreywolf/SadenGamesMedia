@@ -496,14 +496,12 @@ public class CardPage extends JPanel{
         int stock = Integer.parseInt(stockText.getText());
         if(stock != p.getStock())
             stockText.setText(String.valueOf(p.getStock()));
-        if(p.getType().toLowerCase().equals("videogame")){
-            Videogame vg = (Videogame) p;
+        if(p instanceof Videogame vg){
             if(!platformText.getText().toLowerCase().equals(vg.getPlatform()))
                 platformText.setText(vg.getPlatform());
             if(!studioText.getText().toLowerCase().equals(vg.getStudio()))
                 studioText.setText(vg.getStudio());
-        }else if(p.getType().toLowerCase().equals("movie")){
-            Movie mv = (Movie) p;
+        }else if(p instanceof Movie mv){
             if(!directorText.getText().toLowerCase().equals(mv.getDirector()))
                 directorText.setText(mv.getDirector());
             int duration = Integer.parseInt(durationText.getText());

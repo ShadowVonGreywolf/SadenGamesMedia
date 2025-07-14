@@ -65,35 +65,4 @@ public class IconButton extends JButton{
 
         return null;
     }
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-//    public IconButton(String ImagePath, int width, int height){
-//        
-//        URL iconUrl = getClass().getClassLoader().getResource(ImagePath);
-//        this.width = width;
-//        this.height= height;
-//        if (iconUrl != null) {
-//            ImageIcon originalIcon = new ImageIcon(iconUrl);
-//            Image scaledImage = originalIcon.getImage().getScaledInstance(width, height, Image.SCALE_SMOOTH);
-//            setIcon(new ImageIcon(scaledImage));
-//        }
-//    }
-//    public void setNewIcon(String ImagePath){
-//        URL iconUrl = getClass().getClassLoader().getResource(ImagePath);
-//        if (iconUrl != null) {
-//            ImageIcon originalIcon = new ImageIcon(iconUrl);
-//            Image scaledImage = originalIcon.getImage().getScaledInstance(width, height, Image.SCALE_SMOOTH);
-//            setIcon(new ImageIcon(scaledImage));
-//        }
-//    }
-    
 }

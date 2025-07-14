@@ -41,7 +41,6 @@ import javax.swing.SortOrder;
 import javax.swing.SwingConstants;
 import javax.swing.plaf.basic.BasicScrollBarUI;
 import javax.swing.table.DefaultTableCellRenderer;
-import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
 import javax.swing.table.TableColumnModel;
 import javax.swing.table.TableModel;
@@ -410,6 +409,14 @@ public class FinancePanel extends JPanel{
 
     }
     
+    public void applyRangeButtonTrue(){
+        applyRangeButton.setVisible(true);
+    }
+    
+    public void applyRangeButtonFalse(){
+        applyRangeButton.setVisible(false);
+    }
+    
     private MouseAdapter rangeFilter(){
         return new MouseAdapter(){
             public void mouseClicked(MouseEvent e){
@@ -617,8 +624,6 @@ public class FinancePanel extends JPanel{
                     JOptionPane.showMessageDialog(null, "Please select a row to delete.");
                     return;
                 }
-
-                // Convert row index for sorter if necessary
                 int modelRow = financeTable.convertRowIndexToModel(selectedRow);
                 Sale saleToDelete = salesRowData.get(modelRow);
 

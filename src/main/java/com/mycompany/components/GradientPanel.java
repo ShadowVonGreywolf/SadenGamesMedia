@@ -42,7 +42,7 @@ public class GradientPanel extends JPanel {
                 Point2D center = new Point2D.Float(width / 2f, height / 2f);
                 float radius = Math.max(width, height);
                 float[] dist = {0.0f, 1.0f};
-                Color[] colors = {color2, color1}; // center to outer
+                Color[] colors = {color2, color1}; 
                 RadialGradientPaint radial = new RadialGradientPaint(center, radius * 0.5f, dist, colors);
                 g2d.setPaint(radial);
                 break;

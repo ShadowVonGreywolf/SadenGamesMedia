@@ -61,9 +61,14 @@ public class MainMenuPanel extends JPanel {
                 if(!Session.getCurrentUser().getRole().toLowerCase().equals("admin")){
                     addItem.setVisible(false);
                     refresh.setVisible(false);
+                    financeButton.setVisible(false);
+                    usersButton.setVisible(false);
+                    
                 }else{
                     addItem.setVisible(true);
                     refresh.setVisible(true);
+                    financeButton.setVisible(true);
+                    usersButton.setVisible(true);
                 }
                 if(user.getImagePath() != null){
                     System.out.println("trebuie sa mearga imaginea");
@@ -120,6 +125,11 @@ public class MainMenuPanel extends JPanel {
         add(financePanel);
         
         
+        usersPanel.setBounds(0, 50, 1200, 750);
+        usersPanel.setVisible(false);
+        add(usersPanel);
+        
+        
         sideMenuButton.setBounds(2, 0, 48, 48);
         sideMenuButton.setBorderPainted(false);
         sideMenuButton.setFocusPainted(false);
@@ -156,7 +166,6 @@ public class MainMenuPanel extends JPanel {
         
         financeButton.setPreferredSize(new Dimension(100, 50));
         financeButton.setMaximumSize(new Dimension(150, 50));
-        financeButton.setVisible(true);
         financeButton.setFont(new Font("Courier New", Font.BOLD ,20));      
         financeButton.setForeground(Color.WHITE);
         financeButton.setOpaque(false);                     
@@ -170,13 +179,13 @@ public class MainMenuPanel extends JPanel {
         
         usersButton.setPreferredSize(new Dimension(100, 50));
         usersButton.setMaximumSize(new Dimension(150, 50));
-        usersButton.setVisible(true);
         usersButton.setFont(new Font("Courier New", Font.BOLD ,20));      
         usersButton.setForeground(Color.WHITE);
         usersButton.setOpaque(false);                     
         usersButton.setContentAreaFilled(false);           
         usersButton.setBorderPainted(false);
         usersButton.setFocusPainted(false);
+        usersButton.addMouseListener(usersButtonAction());
         sideMenu.add(usersButton);
         
         sideMenu.add(Box.createVerticalStrut(10));
@@ -510,6 +519,7 @@ public class MainMenuPanel extends JPanel {
             public void mouseClicked(MouseEvent e){
                 mainContent.setVisible(false);
                 financePanel.setVisible(false);
+                usersPanel.setVisible(false);
                 accountPanel.setVisible(true);
                 sideMenuAnimation();
             }
@@ -521,6 +531,7 @@ public class MainMenuPanel extends JPanel {
             public void mouseClicked(MouseEvent e){
                 financePanel.setVisible(false);
                 accountPanel.setVisible(false);
+                usersPanel.setVisible(false);
                 mainContent.setVisible(true);
                 sideMenuAnimation();
             }
@@ -531,7 +542,20 @@ public class MainMenuPanel extends JPanel {
             public void mouseClicked(MouseEvent e){
                 mainContent.setVisible(false);
                 accountPanel.setVisible(false);
+                usersPanel.setVisible(false);
                 financePanel.setVisible(true);
+                sideMenuAnimation();
+            }
+        };
+    }
+    
+    private MouseAdapter usersButtonAction(){
+        return new MouseAdapter(){
+            public void mouseClicked(MouseEvent e){
+                mainContent.setVisible(false);
+                accountPanel.setVisible(false);
+                financePanel.setVisible(false);
+                usersPanel.setVisible(true);
                 sideMenuAnimation();
             }
         };
@@ -582,6 +606,7 @@ public class MainMenuPanel extends JPanel {
                         filterRange.setVisible(false);
                         accountPanel.sideMenuOnSettings();
                         addItemRefreshFalse();
+                        financePanel.applyRangeButtonFalse();
                     }      
                 }else{
                     sideMenuWidth -= animationSpeed;
@@ -594,6 +619,7 @@ public class MainMenuPanel extends JPanel {
                         filterRange.setVisible(true);
                         accountPanel.sideMenuOffSettings();
                         addItemRefreshTrue();
+                        financePanel.applyRangeButtonTrue();
                     }
                 }
                 sideMenu.setBounds(0, 0, sideMenuWidth, getHeight());
@@ -648,5 +674,6 @@ public class MainMenuPanel extends JPanel {
     private JButton addItem = new JButton("Add your product");
     private AddProductPanel addProductPanel = new AddProductPanel();
     private JButton refresh = new JButton("Refresh");
+    private UsersPanel usersPanel = new UsersPanel();
     
 }
